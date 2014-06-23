@@ -22,7 +22,7 @@ text {
 		color = d3.scale.category20c();
 	
 	var bubble = d3.layout.pack()
-		.sort(function(a, b) { return b.uniqueWordCount - a.uniqueWordCount; })
+		.sort(function(a, b) { return a.totalWordCount > b.totalWordCount; } )
 		.size([diameter, diameter])
 		.padding(1.5);
 	
@@ -50,7 +50,7 @@ text {
 	node.append("text")
 		.attr("dy", ".3em")
 		.style("text-anchor", "middle")
-		.text(function(d) { return d._id; });
+		.text(function(d) { return d.artistName; });
 	
 	// Returns a flattened hierarchy containing all leaf nodes under the root.
 	function artistStats(root) {
@@ -60,6 +60,8 @@ text {
 			classes.push({_id: root[i]._id,
 							artistName:root[i].value.artistName, 
 							ratio: root[i].value.ratio,
+							uniqueWordCount: root[i].value.uniqueWordCount,
+							totalWordCount: root[i].value.totalWordCount,
 							value: root[i].value.ratio});
 		}
 		return {children: classes};
