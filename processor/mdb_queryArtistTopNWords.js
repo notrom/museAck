@@ -1,15 +1,4 @@
-//db.artistWords.find({"value.artistName": "The Velvet Underground"}).map(
-//		function(o){
-//			var topN = [];
-//			for (var i in o.value.wordCounts) {
-//				if (o.value.wordCounts.hasOwnProperty(i)) {
-//					topN.push([i, o.value.wordCounts[i]]);
-//				}
-//			}
-//			topN.sort(function(a, b) {return b[1] - a[1]});
-//			return topN.slice(0,10);
-//		});
-		
+// mongo.exe muse_ack < processor\mdb_queryArtistTopNWords.js > pages\top20Words.js
 db.artistWords.group(
    {
     key: { _id: 1 },
