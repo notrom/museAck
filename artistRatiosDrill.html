@@ -1,0 +1,193 @@
+<meta charset="utf-8">
+
+<html>	
+<head>
+
+</head>
+<style>
+
+text {
+  font: 10px sans-serif;
+}
+
+</style>
+<body>
+	<div id="topBubble" style="width: 600px; float: left;">
+		<h1>Artists Proportion Of Unique Words</h1>
+	</div>
+	<div id="bottomBubble" style="margin-left: 600px;">
+		<h1>Top 20 Words For Selected Artist</h1>
+	</div>
+	
+	
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+	<script src="ratios.js"></script>
+	
+	<script>
+	var selectedArtistName = "NOFX";
+	var diameter = 600,
+		format = d3.format(",d"),
+		color = d3.scale.category20c();
+	
+	var bubble = d3.layout.pack()
+		.sort(function(a, b) { return a.totalWordCount > b.totalWordCount; } )
+		.size([diameter, diameter])
+		.padding(1.5);
+	
+	var svg = d3.select("#topBubble").append("svg")
+		.attr("width", diameter)
+		.attr("height", diameter)
+		.attr("class", "bubble");
+		
+	var artistStats = artistStats(ratios);
+	
+	var node = svg.selectAll(".node")
+		.data(bubble.nodes(artistStats)
+		.filter(function(d) { return !d.children; }))
+		.enter().append("g")
+		.attr("class", "node")
+		.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+	
+	node.append("title")
+		.text(function(d) { return d._id + ": " + d.ratio; });
+	
+	node.append("circle")
+		.attr("r", function(d) { return d.r; })
+		.style("fill", function(d) { return color(d._id); })
+		.on("click", function(d) {
+						selectedArtistName = d.artistName;
+						updateTopWordsArtist();});
+	
+	node.append("text")
+		.attr("dy", ".3em")
+		.style("text-anchor", "middle")
+		.text(function(d) { return d.artistName; });
+	
+	// Returns a flattened hierarchy containing all leaf nodes under the root.
+	function artistStats(root) {
+		var classes = [];
+		
+		for (var i = 0; i < root.length; i++) {
+			classes.push({_id: root[i]._id,
+							artistName:root[i].value.artistName, 
+							ratio: root[i].value.ratio,
+							uniqueWordCount: root[i].value.uniqueWordCount,
+							totalWordCount: root[i].value.totalWordCount,
+							value: root[i].value.ratio});
+		}
+		return {children: classes};
+	}
+	
+	d3.select(self.frameElement).style("height", diameter + "px");
+	</script>
+	
+	<script src="top20Words.js"></script>
+	<script>
+	
+	var diameter2 = 400,
+		format2 = d3.format(",d"),
+		color2 = d3.scale.category20c();
+	
+	var svg2 = d3.select("#bottomBubble").append("svg")
+		.attr("width", diameter2)
+		.attr("height", diameter2)
+		.attr("class", "bubble");
+	
+	d3.select(self.frameElement).style("height", diameter + "px");
+	
+	function updateTopWordsArtist() {
+		var bubble2 = d3.layout.pack()
+			.sort(function(a, b) { return a.count > b.count; } )
+			.size([diameter2, diameter2])
+			.padding(1.5);
+			
+		var topWords = artistTopWords(selectedArtistName, top20Words);
+		var node2 = svg2.selectAll(".node")
+			.data(bubble2.nodes(topWords)
+					.filter(function(d) { return !d.children; }),
+				function(d) {return d.word} // key data based on className to keep object constancy
+			);
+		
+		// capture the enter selection
+		var nodeEnter = node2.enter()
+			.append("g")
+			.attr("class", "node")
+			.attr("transform", function (d) {
+				return "translate(" + 10 + "," + d.y + ")";
+			});
+		
+		// re-use enter selection for circles
+		nodeEnter
+			.append("circle")
+			.attr("r", function (d) {return d.r;})
+			.style("fill", function (d) {return "grey";});
+		
+		// re-use enter selection for titles
+		nodeEnter
+			.append("title")
+			.text(function (d) {
+				return d.word + ": " + format(d.count);
+			});
+		
+		nodeEnter
+			.append("text")
+			.attr("dy", ".3em")
+			.style("text-anchor", "middle")
+			.text(function(d) { return d.word + ": " + d.count; });
+		
+		node2
+			.append("title")
+			.text(function (d) {
+				return d.word + ": " + format(d.count);
+			});
+		
+		node2.select("text")
+			.text(function(d) { return d.word + ": " + d.count; });
+			
+		node2.select("title")
+			.text(function (d) {
+				return d.word + ": " + format(d.count);
+			});
+		
+		node2.select("circle")
+			.transition().duration(2000)
+			.attr("r", function (d) {
+				return d.r;
+			})
+			.style("fill", function (d) {
+				return color2(d.word);
+			});
+	
+		node2.transition().duration(2000).attr("class", "node")
+			.attr("transform", function (d) {
+				return "translate(" + d.x + "," + d.y + ")";
+			});
+		
+		node2.exit().transition().duration(5000).attr("class", "node")
+			.attr("transform", function (d) {
+				return "translate(" + diameter2 + "," + d.y + ")";
+			}).remove();
+	}
+	
+	// Returns a flattened hierarchy containing all leaf nodes under the root.
+	function artistTopWords(artistName, root) {
+		var topWords = [];
+		
+		for (var i = 0; i < root.length; i++) {
+			if (root[i].artistName === artistName) {
+				var artistTopWords = root[i].topWords;
+				for (var j = 0; j < artistTopWords.length; j++) {
+					topWords.push({ word: artistTopWords[j].word,
+									count: artistTopWords[j].count,
+									value: artistTopWords[j].count });
+				}
+			}		
+		}
+		return {children: topWords};
+	}
+	
+	</script>
+	
+	
+</body>
+</html>
