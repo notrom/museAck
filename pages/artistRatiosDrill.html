@@ -84,7 +84,7 @@ text {
 	
 	<script>
 	
-	var diameter2 = 400,
+	var diameter2 = 600,
 		format2 = d3.format(",d"),
 		color2 = d3.scale.category20c();
 	
@@ -99,7 +99,7 @@ text {
 		var nWords = parseInt(document.getElementById("nWords").value, 10);
 		var bubble2 = d3.layout.pack()
 			.sort(function(a, b) { return a.count > b.count; } )
-			.size([diameter2, diameter2])
+			.size([500, 500])
 			.padding(1.5);
 		
 		document.getElementById("selectArtistTitle").innerHTML = "Top N Words For " + selectedArtistName;
@@ -165,14 +165,15 @@ text {
 				return "translate(" + d.x + "," + d.y + ")";
 			});
 		
-		node2.exit()
-			.transition().duration(2000).attr("class", "node")
+		var nodeExit = node2.exit().transition().duration(2000)
+			.attr("class", "node")
 			.attr("transform", function (d) {
-				return "translate(" + diameter2 + "," + d.y + ")";
-			})
+				return "translate(" + 500 + "," + d.y + ")";
+			});;
+		nodeExit.transition().duration(2000)
 			.select("circle")
-			.attr("r", 0)
-			.transition().duration(5000).remove();
+			.attr("r", 0);
+		nodeExit.transition().duration(5000).remove();
 	}
 	
 	// Returns a flattened hierarchy containing all leaf nodes under the root.
