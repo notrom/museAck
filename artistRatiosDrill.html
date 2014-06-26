@@ -12,11 +12,12 @@ text {
 
 </style>
 <body>
-	<div id="topBubble" style="width: 600px; float: left;">
+	<div id="topBubble" style="width: 50%; float: left;">
 		<h1>Artists Proportion Of Unique Words</h1>
 	</div>
-	<div id="bottomBubble" style="margin-left: 600px;">
-		<h1>Top 20 Words For Selected Artist</h1>
+	<div id="bottomBubble" style="margin-left: 50%;">
+		<h1 id="selectArtistTitle">Top N Words For Selected Artist</h1>
+		<p>N = <input id="nWords" type="text" value="10" size="4"></input>(max 100)</p>
 	</div>
 	
 	
@@ -81,7 +82,7 @@ text {
 	d3.select(self.frameElement).style("height", diameter + "px");
 	</script>
 	
-	<script src="top20Words.js"></script>
+	<script src="top100Words.js"></script>
 	<script>
 	
 	var diameter2 = 400,
@@ -96,15 +97,17 @@ text {
 	d3.select(self.frameElement).style("height", diameter + "px");
 	
 	function updateTopWordsArtist() {
+		var nWords = parseInt(document.getElementById("nWords").value, 10);
 		var bubble2 = d3.layout.pack()
 			.sort(function(a, b) { return a.count > b.count; } )
 			.size([diameter2, diameter2])
 			.padding(1.5);
-			
-		var topWords = artistTopWords(selectedArtistName, top20Words);
+		
+		document.getElementById("selectArtistTitle").innerHTML = "Top N Words For " + selectedArtistName;
+		var topWords = artistTopWords(selectedArtistName, top100Words);
 		var node2 = svg2.selectAll(".node")
 			.data(bubble2.nodes(topWords)
-					.filter(function(d) { return !d.children; }),
+					.filter(function(d, i) { return !d.children && i <= nWords; }),
 				function(d) {return d.word} // key data based on className to keep object constancy
 			);
 		
@@ -119,8 +122,8 @@ text {
 		// re-use enter selection for circles
 		nodeEnter
 			.append("circle")
-			.attr("r", function (d) {return d.r;})
-			.style("fill", function (d) {return "grey";});
+			.attr("r", function (d) {return 0;})
+			.style("fill", function (d) {return color2(d.word);});
 		
 		// re-use enter selection for titles
 		nodeEnter
@@ -150,12 +153,12 @@ text {
 			});
 		
 		node2.select("circle")
+			.style("fill", function (d) {
+				return color2(d.word);
+			})
 			.transition().duration(2000)
 			.attr("r", function (d) {
 				return d.r;
-			})
-			.style("fill", function (d) {
-				return color2(d.word);
 			});
 	
 		node2.transition().duration(2000).attr("class", "node")
@@ -163,10 +166,14 @@ text {
 				return "translate(" + d.x + "," + d.y + ")";
 			});
 		
-		node2.exit().transition().duration(5000).attr("class", "node")
+		node2.exit()
+			.transition().duration(2000).attr("class", "node")
 			.attr("transform", function (d) {
 				return "translate(" + diameter2 + "," + d.y + ")";
-			}).remove();
+			})
+			.select("circle")
+			.attr("r", 0)
+			.transition().duration(5000).remove();
 	}
 	
 	// Returns a flattened hierarchy containing all leaf nodes under the root.
