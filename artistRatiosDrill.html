@@ -10,15 +10,30 @@ text {
   font: 10px sans-serif;
 }
 
+.chart rect {
+  fill: steelblue;
+}
+
+.chart text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: end;
+}
+
 </style>
 <body>
 	<div id="topBubble" style="width: 50%; float: left;">
 		<h1>Artists Proportion Of Unique Words</h1>
 		<p>Click an Artist</p>
 	</div>
-	<div id="bottomBubble" style="margin-left: 50%;">
-		<h1 id="selectArtistTitle">Top N Words For Selected Artist</h1>
-		<p>N = <input id="nWords" type="text" value="10" size="4"></input>(max 100)</p>
+	<div style="margin-left: 50%;">
+		<div id="bottomBubble">
+			<h1 id="selectArtistTitle">Top N Words For Selected Artist</h1>
+			<p>N = <input id="nWords" type="text" value="10" size="4"></input>(max 100)</p>
+		</div>
+		<div id="allTopWords">
+			<h1>All Artist Combined top N Words</h1>
+		</div>
 	</div>
 	
 	
@@ -28,43 +43,45 @@ text {
 	<script>
 	///////////////////////////////////////////////////////////////////////////
 	var selectedArtistName = "NOFX";
-	var diameter = 600,
+	var diameter = 350,
+		width = diameter,
+		barHeight = 11,
 		format = d3.format(",d"),
 		color = d3.scale.category20c();
 	
-	var bubble = d3.layout.pack()
-		.sort(function(a, b) { return a.totalWordCount > b.totalWordCount; } )
-		.size([diameter, diameter])
-		.padding(1.5);
+	var x = d3.scale.linear()
+		.range([0, width]);
+
+	var chart = d3.select("#topBubble").append("svg")
+		.attr("width", width)
+		.attr("class", "chart");;
 	
-	var svg = d3.select("#topBubble").append("svg")
-		.attr("width", diameter)
-		.attr("height", diameter)
-		.attr("class", "bubble");
-		
 	var artistStats = artistStats(ratios);
 	
-	var node = svg.selectAll(".node")
-		.data(bubble.nodes(artistStats)
-		.filter(function(d) { return !d.children; }))
+	x.domain([0, d3.max(artistStats, function(d) { return d.value; })]);
+	
+	chart.attr("height", barHeight * artistStats.length);
+	
+	var bar = chart.selectAll("g")
+		.data(artistStats)
 		.enter().append("g")
-		.attr("class", "node")
-		.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+		.attr("transform", function(d, i) { return "translate(0," + i * barHeight + ")"; });
 	
-	node.append("title")
-		.text(function(d) { return d._id + ": " + d.ratio; });
-	
-	node.append("circle")
-		.attr("r", function(d) { return d.r; })
-		.style("fill", function(d) { return color(d._id); })
+	bar.append("rect")
+		.attr("width", function(d) { return x(d.value); })
+		.attr("height", barHeight - 1)
 		.on("click", function(d) {
 						selectedArtistName = d.artistName;
 						updateTopWordsArtist();});
 	
-	node.append("text")
-		.attr("dy", ".3em")
-		.style("text-anchor", "middle")
-		.text(function(d) { return d.artistName; });
+	bar.append("text")
+		.attr("x", function(d) { return x(d.value) - 3; })
+		.attr("y", barHeight / 2)
+		.attr("dy", ".35em")
+		.text(function(d) { return d.artistName + ": " + (d.value*100).toFixed(2) + "%"; })
+		.on("click", function(d) {
+						selectedArtistName = d.artistName;
+						updateTopWordsArtist();});
 	
 	// Returns a flattened hierarchy containing all leaf nodes under the root.
 	function artistStats(root) {
@@ -77,8 +94,10 @@ text {
 							uniqueWordCount: root[i].value.uniqueWordCount,
 							totalWordCount: root[i].value.totalWordCount,
 							value: root[i].value.ratio});
+							//value: 50});
 		}
-		return {children: classes};
+		classes.sort(function(a, b) { return b["ratio"] - a["ratio"]; });
+		return classes;
 	}
 	
 	d3.select(self.frameElement).style("height", diameter + "px");
@@ -197,24 +216,62 @@ text {
 	}
 	///////////////////////////////////////////////////////////////////////////
 	</script>
-	
+	<!-- get the big data file here -->
+	<script src="top100Words.js"></script>
 	<script>
+	var allArtistsTopWords = allTopWordCounts(top100Words);
+	
+	var barWidth = 1,
+		height3 = 100;
+		width3 = diameter2;
+		//format = d3.format(",d"),
+		//color = d3.scale.category20c();
+	
+	var x3 = d3.scale.linear()
+		.range([0, height3]);
+
+	var chart3 = d3.select("#allTopWords").append("svg")
+		.attr("width", barWidth * allArtistsTopWords.length)
+		.attr("class", "chart");;
+	
+	x3.domain([0, d3.max(allArtistsTopWords, function(d) { return d.value; })]);
+	
+	chart3.attr("height", height3);
+	
+	var bar3 = chart3.selectAll("g")
+		.data(allArtistsTopWords)
+		.enter().append("g")
+		.attr("transform", function(d, i) { return "translate(" + i * barWidth + ", 0)"; });
+	
+	bar3.append("rect")
+		.attr("width", barWidth)
+		.attr("height", function(d) { return x3(d.value); });
+	
+	bar3.append("title")
+		.text(function(d) { return d.word + ": " + d.count; });
+	
 	function allTopWordCounts(artistsWords) {
 		var allWords = [];
 		var idx = {};
+		// for each artist
 		for (var i = 0; i < artistsWords.length; i++) {
-			var artistTopWords = root[i].topWords;
-			for (var j = 0; j < artistTopWords.length && j < nWords; j++) {
-				
-				topWords.push({ word: artistTopWords[j].word,
-								count: artistTopWords[j].count,
-								value: artistTopWords[j].count });
+			var artistTopWords = artistsWords[i].topWords;
+			// for each word for that artist
+			for (var j = 0; j < artistTopWords.length; j++) {
+				if (idx.hasOwnProperty(artistTopWords[j].word)) {
+					allWords[idx[artistTopWords[j].word]].count += artistTopWords[j].count;
+					allWords[idx[artistTopWords[j].word]].value += artistTopWords[j].count;
+				} else {
+					idx[artistTopWords[j].word] = allWords.length;
+					allWords.push({ word: artistTopWords[j].word,
+									count: artistTopWords[j].count,
+									value: artistTopWords[j].count });
+				}
 			}
 		}
+		return allWords.sort(function (a, b) {return b.count - a.count;});
 	}
 	</script>
-	
-	<script src="top100Words.js"></script>
 	
 </body>
 </html>
