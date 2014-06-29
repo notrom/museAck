@@ -25,6 +25,7 @@ text {
 	<script src="ratios.js"></script>
 	
 	<script>
+	///////////////////////////////////////////////////////////////////////////
 	var selectedArtistName = "NOFX";
 	var diameter = 600,
 		format = d3.format(",d"),
@@ -80,10 +81,11 @@ text {
 	}
 	
 	d3.select(self.frameElement).style("height", diameter + "px");
+	///////////////////////////////////////////////////////////////////////////
 	</script>
 	
 	<script>
-	
+	///////////////////////////////////////////////////////////////////////////
 	var diameter2 = 600,
 		format2 = d3.format(",d"),
 		color2 = d3.scale.category20c();
@@ -103,10 +105,10 @@ text {
 			.padding(1.5);
 		
 		document.getElementById("selectArtistTitle").innerHTML = "Top N Words For " + selectedArtistName;
-		var topWords = artistTopWords(selectedArtistName, top100Words);
+		var topWords = artistTopWords(selectedArtistName, top100Words, nWords);
 		var node2 = svg2.selectAll(".node")
 			.data(bubble2.nodes(topWords)
-					.filter(function(d, i) { return !d.children && i <= nWords; }),
+					.filter(function(d, i) { return !d.children; }),
 				function(d) {return d.word} // key data based on className to keep object constancy
 			);
 		
@@ -177,13 +179,13 @@ text {
 	}
 	
 	// Returns a flattened hierarchy containing all leaf nodes under the root.
-	function artistTopWords(artistName, root) {
+	function artistTopWords(artistName, root, nWords) {
 		var topWords = [];
 		
 		for (var i = 0; i < root.length; i++) {
 			if (root[i].artistName === artistName) {
 				var artistTopWords = root[i].topWords;
-				for (var j = 0; j < artistTopWords.length; j++) {
+				for (var j = 0; j < artistTopWords.length && j < nWords; j++) {
 					topWords.push({ word: artistTopWords[j].word,
 									count: artistTopWords[j].count,
 									value: artistTopWords[j].count });
@@ -192,7 +194,23 @@ text {
 		}
 		return {children: topWords};
 	}
+	///////////////////////////////////////////////////////////////////////////
+	</script>
 	
+	<script>
+	function allTopWordCounts(artistsWords) {
+		var allWords = [];
+		var idx = {};
+		for (var i = 0; i < artistsWords.length; i++) {
+			var artistTopWords = root[i].topWords;
+			for (var j = 0; j < artistTopWords.length && j < nWords; j++) {
+				
+				topWords.push({ word: artistTopWords[j].word,
+								count: artistTopWords[j].count,
+								value: artistTopWords[j].count });
+			}
+		}
+	}
 	</script>
 	
 	<script src="top100Words.js"></script>
