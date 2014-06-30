@@ -20,22 +20,101 @@ text {
   text-anchor: end;
 }
 
+
+/*********************/
+		/*** The Essential Code ***/
+
+		body {
+			margin: 0;
+			padding-left: 350px;    /* LC fullwidth */
+			padding-right: 370px;   /* RC fullwidth + CC padding */
+			min-width: 240px;       /* LC fullwidth + CC padding */
+		}
+
+		#header, #footer {
+			margin-left: -350px;    /* LC fullwidth */
+			margin-right: -370px;   /* RC fullwidth + CC padding */
+		}
+
+		.column {
+			position: relative;
+			float: left;
+		}
+
+		#centerCol {
+			padding: 0 20px;
+			width: 100%;
+		}
+
+		#leftCol {
+			width: 330px;           /* LC width */
+			padding: 0 10px;        /* LC padding */
+			right: 370px;           /* LC fullwidth + CC padding */
+			margin-left: -100%;
+		}
+
+		#rightCol {
+			width: 330px;           /* RC width */
+			padding: 0 10px;        /* RC padding */
+			margin-right: -100%;
+		}
+
+		#footer {
+			clear: both;
+		}
+
+		/*** IE Fix ***/
+		* html #leftCol {
+			left: 150px;            /* RC fullwidth */
+		}
+
+		/*** Just for Looks ***/
+
+		body {
+			background: #FFF;
+		}
+
+		#header, #footer {
+			font-size: large;
+			text-align: center;
+			padding: 0.3em 0;
+			background: #999;
+		}
+
+		#leftCol {
+			background: #FFF;
+		}
+
+		#centerCol {
+			background: #FFF;
+		}
+
+		#rightCol {
+			background: #FFF;
+		}
+
+		.column {
+			padding-top: 1em;
+			text-align: justify;
+		}
+/*********************/
+	
+
 </style>
 <body>
-	<div id="topBubble" style="width: 50%; float: left;">
+	<div id="header">This is the header.</div>
+	<div id="centerCol" class="column">
+		<h1 id="selectArtistTitle">Top N Words For Selected Artist</h1>
+		<p>N = <input id="nWords" type="text" value="10" size="4"></input>(max 100)</p>
+	</div>
+	<div id="leftCol" class="column">
 		<h1>Artists Proportion Of Unique Words</h1>
 		<p>Click an Artist</p>
 	</div>
-	<div style="margin-left: 50%;">
-		<div id="bottomBubble">
-			<h1 id="selectArtistTitle">Top N Words For Selected Artist</h1>
-			<p>N = <input id="nWords" type="text" value="10" size="4"></input>(max 100)</p>
-		</div>
-		<div id="allTopWords">
-			<h1>All Artist Combined top N Words</h1>
-		</div>
+	<div id="rightCol" class="column">
+		<h1>All Artist Combined top N Words</h1>
 	</div>
-	
+	<div id="footer">This is the footer.</div>
 	
 	<script src="http://d3js.org/d3.v3.min.js"></script>
 	<script src="ratios.js"></script>
@@ -43,7 +122,7 @@ text {
 	<script>
 	///////////////////////////////////////////////////////////////////////////
 	var selectedArtistName = "NOFX";
-	var diameter = 350,
+	var diameter = document.getElementById("leftCol").offsetWidth,
 		width = diameter,
 		barHeight = 11,
 		format = d3.format(",d"),
@@ -52,7 +131,7 @@ text {
 	var x = d3.scale.linear()
 		.range([0, width]);
 
-	var chart = d3.select("#topBubble").append("svg")
+	var chart = d3.select("#leftCol").append("svg")
 		.attr("width", width)
 		.attr("class", "chart");;
 	
@@ -106,11 +185,11 @@ text {
 	
 	<script>
 	///////////////////////////////////////////////////////////////////////////
-	var diameter2 = 600,
+	var diameter2 = document.getElementById("centerCol").offsetWidth,
 		format2 = d3.format(",d"),
 		color2 = d3.scale.category20c();
 	
-	var svg2 = d3.select("#bottomBubble").append("svg")
+	var svg2 = d3.select("#centerCol").append("svg")
 		.attr("width", diameter2)
 		.attr("height", diameter2)
 		.attr("class", "bubble");
@@ -126,6 +205,9 @@ text {
 		
 		document.getElementById("selectArtistTitle").innerHTML = "Top N Words For " + selectedArtistName;
 		var topWords = artistTopWords(selectedArtistName, top100Words, nWords);
+		
+		updateAllTopWords(topWords);
+		
 		var node2 = svg2.selectAll(".node")
 			.data(bubble2.nodes(topWords)
 					.filter(function(d, i) { return !d.children; }),
@@ -219,53 +301,74 @@ text {
 	<!-- get the big data file here -->
 	<script src="top100Words.js"></script>
 	<script>
-	var allArtistsTopWords = allTopWordCounts(top100Words);
 	
-	var barWidth = 1,
-		height3 = 100;
-		width3 = diameter2;
-		//format = d3.format(",d"),
-		//color = d3.scale.category20c();
+	var barHeight3 = 11,
+		height3 = 200;
+		width3 = document.getElementById("rightCol").offsetWidth;
+			
+	var chart3 = d3.select("#rightCol").append("svg")
+		.attr("width", width3);
+		//.attr("class", "chart");
+			
+	//var allArtistsTopWords = allTopWordCounts(top100Words, []);
+	updateAllTopWords({children:[]});
 	
-	var x3 = d3.scale.linear()
-		.range([0, height3]);
-
-	var chart3 = d3.select("#allTopWords").append("svg")
-		.attr("width", barWidth * allArtistsTopWords.length)
-		.attr("class", "chart");;
+	function updateAllTopWords(selectTopWords) {
+		var x3 = d3.scale.linear()
+			.range([0, width3]);
 	
-	x3.domain([0, d3.max(allArtistsTopWords, function(d) { return d.value; })]);
+		var allArtistsTopWords = allTopWordCounts(top100Words, selectTopWords);
+		
+		x3.domain([0, d3.max(allArtistsTopWords, function(d) { return d.value; })]);
+		
+		chart3.attr("height", barHeight3 * allArtistsTopWords.length);
+		
+		var bar3 = chart3.selectAll("g")
+			.data(allArtistsTopWords)
+			.style("fill", function (d) {
+					if (d.highlight === 1) {
+						return color2(d.word);
+					} else {
+						return "steelblue";
+					}
+				})
+			.enter().append("g")
+			.attr("transform", function(d, i) { return "translate(" + (width3 - x3(d.value)) + ", " + i * barHeight3 + ")"; });
+		
+		bar3.append("rect")
+			.attr("width", function(d) { return x3(d.value);})
+			.attr("height", barHeight3 - 1);
+		
+		bar3.append("title")
+			.text(function(d) { return d.word + ": " + d.count; });
+	}
 	
-	chart3.attr("height", height3);
-	
-	var bar3 = chart3.selectAll("g")
-		.data(allArtistsTopWords)
-		.enter().append("g")
-		.attr("transform", function(d, i) { return "translate(" + i * barWidth + ", 0)"; });
-	
-	bar3.append("rect")
-		.attr("width", barWidth)
-		.attr("height", function(d) { return x3(d.value); });
-	
-	bar3.append("title")
-		.text(function(d) { return d.word + ": " + d.count; });
-	
-	function allTopWordCounts(artistsWords) {
+	function allTopWordCounts(allArtistsWords, selectTopWords) {
 		var allWords = [];
 		var idx = {};
+		
+		var selectWordsString = "|";
+		
+		selectTopWords.children.forEach(function (d) { selectWordsString += d.word + "|"; });
+		
 		// for each artist
-		for (var i = 0; i < artistsWords.length; i++) {
-			var artistTopWords = artistsWords[i].topWords;
+		for (var i = 0; i < allArtistsWords.length; i++) {
+			var artistTopWords = allArtistsWords[i].topWords;
 			// for each word for that artist
 			for (var j = 0; j < artistTopWords.length; j++) {
 				if (idx.hasOwnProperty(artistTopWords[j].word)) {
 					allWords[idx[artistTopWords[j].word]].count += artistTopWords[j].count;
 					allWords[idx[artistTopWords[j].word]].value += artistTopWords[j].count;
 				} else {
+					var highlight = 0;
+					if (selectWordsString.indexOf("|"+artistTopWords[j].word+"|") != -1) {	
+						highlight = 1;
+					}
 					idx[artistTopWords[j].word] = allWords.length;
 					allWords.push({ word: artistTopWords[j].word,
+									highlight: highlight,
 									count: artistTopWords[j].count,
-									value: artistTopWords[j].count });
+									value: artistTopWords[j].count + 1000});
 				}
 			}
 		}
