@@ -1,8 +1,12 @@
-<meta charset="utf-8">
+<!DOCTYPE html>
 
 <html>	
 <head>
-
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<!--[if lt IE 9]>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/aight/1.2.2/aight.min.js"></script>
+	<![endif]-->
 </head>
 <style>
 
@@ -22,111 +26,185 @@ text {
 
 
 /*********************/
-		/*** The Essential Code ***/
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
 
-		body {
-			margin: 0;
-			padding-left: 350px;    /* LC fullwidth */
-			padding-right: 370px;   /* RC fullwidth + CC padding */
-			min-width: 240px;       /* LC fullwidth + CC padding */
-		}
+body { 
+  font-family: 'Open Sans', sans-serif;
+  color: #666;
+}
 
-		#header, #footer {
-			margin-left: -350px;    /* LC fullwidth */
-			margin-right: -370px;   /* RC fullwidth + CC padding */
-		}
+body h1 {
+	font-size: 1em;
+}
 
-		.column {
-			position: relative;
-			float: left;
-		}
+body p {
+	font-size: 0.75em;
+}
 
-		#centerCol {
-			padding: 0 20px;
-			width: 100%;
-		}
+/* STRUCTURE */
 
-		#leftCol {
-			width: 330px;           /* LC width */
-			padding: 0 10px;        /* LC padding */
-			right: 370px;           /* LC fullwidth + CC padding */
-			margin-left: -100%;
-		}
+#pagewrap {
+	padding: 5px;
+	width: 1100px;
+	margin: 20px auto;
+}
+#header {
+	height: 100px;
+	padding: 0 15px;
+}
+#leftCol {
+	width: 290px;
+	float: left;
+	padding: 5px 15px;
+}
 
-		#rightCol {
-			width: 330px;           /* RC width */
-			padding: 0 10px;        /* RC padding */
-			margin-right: -100%;
-		}
+#centerCol {
+	width: 484px; /* Account for margins + border values */
+	float: left;
+	padding: 5px 15px;
+	margin: 0px 5px 5px 5px;
+}
 
-		#footer {
-			clear: both;
-		}
+#rightCol {
+	width: 220px;
+	padding: 5px 15px;
+	float: left;
+}
+#footer {
+	clear: both;
+	padding: 0 15px;
+}
 
-		/*** IE Fix ***/
-		* html #leftCol {
-			left: 150px;            /* RC fullwidth */
-		}
+/************************************************************************************
+MEDIA QUERIES
+*************************************************************************************/
+/* for 980px or less */
+@media screen and (max-width: 980px) {
+	
+	#pagewrap {
+		width: 94%;
+	}
+	#content {
+		width: 41%;
+		padding: 1% 4%;
+	}
+	#middle {
+		width: 41%;
+		padding: 1% 4%;
+		margin: 0px 0px 5px 5px;
+		float: right;
+	}
+	
+	#sidebar {
+		clear: both;
+		padding: 1% 4%;
+		width: auto;
+		float: none;
+	}
 
-		/*** Just for Looks ***/
+	#header, #footer {
+		padding: 1% 4%;
+	}
+}
 
-		body {
-			background: #FFF;
-		}
+/* for 700px or less */
+@media screen and (max-width: 600px) {
 
-		#header, #footer {
-			font-size: large;
-			text-align: center;
-			padding: 0.3em 0;
-			background: #999;
-		}
+	#content {
+		width: auto;
+		float: none;
+	}
+	
+	#middle {
+		width: auto;
+		float: none;
+		margin-left: 0px;
+	}
+	
+	#sidebar {
+		width: auto;
+		float: none;
+	}
 
-		#leftCol {
-			background: #FFF;
-		}
+}
 
-		#centerCol {
-			background: #FFF;
-		}
+/* for 480px or less */
+@media screen and (max-width: 480px) {
 
-		#rightCol {
-			background: #FFF;
-		}
+	#header {
+		height: auto;
+	}
+	h1 {
+		font-size: 2em;
+	}
+	#sidebar {
+		display: none;
+	}
 
-		.column {
-			padding-top: 1em;
-			text-align: justify;
-		}
+}
+
+
+#content {
+	background: #f8f8f8;
+}
+#sidebar {
+	background: #f0efef;
+}
+#header, #content, #middle, #sidebar {
+	margin-bottom: 5px;
+}
+
+#pagewrap, #header, #content, #middle, #sidebar, #footer {
+	border: solid 1px #ccc;
+}
 /*********************/
 	
 
 </style>
 <body>
-	<div id="header">This is the header.</div>
-	<div id="centerCol" class="column">
-		<h1 id="selectArtistTitle">Top N Words For Selected Artist</h1>
-		<p>N = <input id="nWords" type="text" value="10" size="4"></input>(max 100)</p>
+	<div id="pagewrap">
+		<div id="header">This is the header.</div>
+		<div id="leftCol" class="column">
+			<h1>Artists Proportion Of Unique Words</h1>
+			<p>Click an Artist</p>
+		</div>
+		<div id="centerCol" class="column">
+			<h1 id="selectArtistTitle">Top N Words For Selected Artist</h1>
+			<p>N = <input id="nWords" type="text" value="10" size="4"></input>(max 100)</p>
+		</div>
+		<div id="rightCol" class="column">
+			<h1>All Artist Combined Top Words</h1>
+		</div>
+		<div id="footer">This is the footer.</div>
 	</div>
-	<div id="leftCol" class="column">
-		<h1>Artists Proportion Of Unique Words</h1>
-		<p>Click an Artist</p>
-	</div>
-	<div id="rightCol" class="column">
-		<h1>All Artist Combined top N Words</h1>
-	</div>
-	<div id="footer">This is the footer.</div>
-	
 	<script src="http://d3js.org/d3.v3.min.js"></script>
 	<script src="ratios.js"></script>
 	
 	<script>
+	
+	function getStyle(oElm, strCssRule){
+		var strValue = "";
+		if(document.defaultView && document.defaultView.getComputedStyle){
+			strValue = document.defaultView.getComputedStyle(oElm, "").getPropertyValue(strCssRule);
+		}
+		else if(oElm.currentStyle){
+			strCssRule = strCssRule.replace(/\-(\w)/g, function (strMatch, p1){
+				return p1.toUpperCase();
+			});
+			strValue = oElm.currentStyle[strCssRule];
+		}
+		return strValue;
+	}
+	
 	///////////////////////////////////////////////////////////////////////////
 	var selectedArtistName = "NOFX";
-	var diameter = document.getElementById("leftCol").offsetWidth,
-		width = diameter,
+	var width = document.getElementById("leftCol").offsetWidth,
 		barHeight = 11,
 		format = d3.format(",d"),
 		color = d3.scale.category20c();
+	
+	width -= parseInt(getStyle(document.getElementById("leftCol"), "padding-right"));
+	width -= parseInt(getStyle(document.getElementById("leftCol"), "padding-right"));
 	
 	var x = d3.scale.linear()
 		.range([0, width]);
@@ -179,7 +257,7 @@ text {
 		return classes;
 	}
 	
-	d3.select(self.frameElement).style("height", diameter + "px");
+	//d3.select(self.frameElement).style("height", diameter + "px");
 	///////////////////////////////////////////////////////////////////////////
 	</script>
 	
@@ -188,20 +266,23 @@ text {
 	var diameter2 = document.getElementById("centerCol").offsetWidth,
 		format2 = d3.format(",d"),
 		color2 = d3.scale.category20c();
+		
+	diameter2 -= parseInt(getStyle(document.getElementById("centerCol"), "padding-right"));
+	diameter2 -= parseInt(getStyle(document.getElementById("centerCol"), "padding-left"));
 	
 	var svg2 = d3.select("#centerCol").append("svg")
 		.attr("width", diameter2)
 		.attr("height", diameter2)
 		.attr("class", "bubble");
 	
-	d3.select(self.frameElement).style("height", diameter + "px");
+	//d3.select(self.frameElement).style("height", diameter + "px");
 	
 	function updateTopWordsArtist() {
 		var nWords = parseInt(document.getElementById("nWords").value, 10);
 		var bubble2 = d3.layout.pack()
 			.sort(function(a, b) { return a.count > b.count; } )
-			.size([500, 500])
-			.padding(1.5);
+			.size([diameter2, diameter2])
+			.padding(1);
 		
 		document.getElementById("selectArtistTitle").innerHTML = "Top N Words For " + selectedArtistName;
 		var topWords = artistTopWords(selectedArtistName, top100Words, nWords);
@@ -259,12 +340,12 @@ text {
 			.style("fill", function (d) {
 				return color2(d.word);
 			})
-			.transition().duration(2000)
+			.transition().duration(3000)
 			.attr("r", function (d) {
 				return d.r;
 			});
 	
-		node2.transition().duration(2000).attr("class", "node")
+		node2.transition().duration(3000).attr("class", "node")
 			.attr("transform", function (d) {
 				return "translate(" + d.x + "," + d.y + ")";
 			});
@@ -272,7 +353,7 @@ text {
 		var nodeExit = node2.exit().transition().duration(2000)
 			.attr("class", "node")
 			.attr("transform", function (d) {
-				return "translate(" + 500 + "," + d.y + ")";
+				return "translate(" + (diameter2 - 20) + "," + d.y + ")";
 			});;
 		nodeExit.transition().duration(2000)
 			.select("circle")
@@ -303,8 +384,10 @@ text {
 	<script>
 	
 	var barHeight3 = 11,
-		height3 = 200;
-		width3 = document.getElementById("rightCol").offsetWidth;
+		width3 = document.getElementById("rightCol").clientWidth;
+	// remvoe the padding from the width
+	width3 -= parseInt(getStyle(document.getElementById("rightCol"), "padding-right"));
+	width3 -= parseInt(getStyle(document.getElementById("rightCol"), "padding-left"));
 			
 	var chart3 = d3.select("#rightCol").append("svg")
 		.attr("width", width3);
@@ -329,7 +412,7 @@ text {
 					if (d.highlight === 1) {
 						return color2(d.word);
 					} else {
-						return "steelblue";
+						return "black";
 					}
 				})
 			.enter().append("g")
@@ -341,6 +424,13 @@ text {
 		
 		bar3.append("title")
 			.text(function(d) { return d.word + ": " + d.count; });
+			
+		bar3.append("text")
+			.attr("x", function(d) { return (3); })
+			.attr("y", barHeight3 / 2)
+			.attr("dy", ".35em")
+			.attr("fill", "white")
+			.text(function(d) { return d.word; });
 	}
 	
 	function allTopWordCounts(allArtistsWords, selectTopWords) {
@@ -368,7 +458,7 @@ text {
 					allWords.push({ word: artistTopWords[j].word,
 									highlight: highlight,
 									count: artistTopWords[j].count,
-									value: artistTopWords[j].count + 1000});
+									value: artistTopWords[j].count + 5000});
 				}
 			}
 		}
