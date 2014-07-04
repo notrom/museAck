@@ -49,7 +49,7 @@ body p {
 	margin: 20px auto;
 }
 #header {
-	height: 100px;
+	/*height: 100px;*/
 	padding: 0 15px;
 }
 #leftCol {
@@ -163,25 +163,68 @@ MEDIA QUERIES
 </style>
 <body>
 	<div id="pagewrap">
-		<div id="header">This is the header.</div>
+		<div id="header">
+			<p style="font-size: 50px;">Rolling Stone Top 100 Artists - Lyric Analysis</p>
+			<p>
+			After seeing this <a href="http://rappers.mdaniels.com.s3-website-us-east-1.amazonaws.com/"> analysis of the lyrics used by hip hop artists</a>, 
+			I was curious to see how these numbers stacked up with other artist in other genres. So this is what I've got so far ...
+			</p>
+			<p>
+			Rolling Stone Magazine have compiled a list of their <a href="http://www.rollingstone.com/music/lists/100-greatest-artists-of-all-time-19691231">top 100 musical artists of all time</a>.
+			I figure that's probably a pretty good place to start, it's an interesting list with a wide range of artists and some of the entries make for good reading.
+			</p>
+			<p>
+			Using that list as a base I pulled in a list of all the albums and songs in those albums for each of those artists from 
+			<a href="http://lyrics.wikia.com/">LyricWikia</a>, the <a href="http://api.wikia.com/wiki/LyricWiki_API">API</a> 
+			worked like it said on the box, really usable. I wasn't able to collect a discogrpahy for all the artists but I got most of them
+			(I'm pretty sure that was more to do with the way I was using the API data than with the API itself).
+			</p>
+			<p>
+			With the complete dicography for most of the artists in Rolling Stone's list, I then went on to collect the lyrics for those songs
+			from <a href="http://www.chartlyrics.com/">Chartlyrics</a> (I would encourage you to consider contributing to their free community).
+			They do have an API which worked OK for individaul queries, but appeared to be rate limited to 1 request every 20 seconds. 
+			I ended up just scraping the lyrics web pages html for the songs I could find. I couldn't get all the songs for all the artist but I 
+			got enough to work from. I exlcuded compilation albums and "featuring" appearances, and only stored one copy of each song regardless
+			of how many times it appears in the discography.
+			</p>
+			<p>
+			Below is a visualisation of the lyrics I collected. I've filtered out the artist where I collected less than 10,000 words. Click an artist lexical density
+			bar on the left and a bubble chart with that artist's top N words is presented, N can be adjusted to show more or less words. 
+			The right set of bars shows the number of times each word appears when the top 100 words for all artists are combined. The bar colour 
+			changes to match the colour of the word in the bubble chart.
+			</p>
+			<p>
+			<a href="http://en.wikipedia.org/wiki/Lexical_density">Lexical Density</a> seems like a reasonably good indicator of the vocabulary
+			used by each artist, it differs from the measure use in the orignal hip hop analysis but I think it allows for a good comparison between 
+			these various artists. As a point of reference with the hip hop data, Ice T, pretty much in the middle of the pack, has a lexical 
+			density of (4431/35000)*100 = 12.66%. The lowset entry is DMX at 9.18%, and the highest Aesop Rock at a whopping 21.12%.
+			</p>
+			<p>
+			So that's what I've got at the moment, it's a work in progress and I've got a few more ideas about what I can do with this set of data.
+			I'll see where it goes next.
+			</p>
+			<p>
+			(Note: Tool and NOFX do not appear in Rolling Stone's list, they were used in some early test cases 
+			for the lyric collection process and I've decided to keep them in there)
+			</p>
+		</div>
 		<div id="leftCol" class="column">
-			<h1>Artists Proportion Of Unique Words</h1>
+			<h1>Artist Lexical Density</h1>
 			<p>Click an Artist</p>
 		</div>
 		<div id="centerCol" class="column">
 			<h1 id="selectArtistTitle">Top N Words For Selected Artist</h1>
-			<p>N = <input id="nWords" type="text" value="10" size="4"></input>(max 100)</p>
+			<p>N = <input id="nWords" type="text" value="10" size="4" onchange="updateTopWordsArtist()"></input>(max 100)</p>
 		</div>
 		<div id="rightCol" class="column">
 			<h1>All Artist Combined Top Words</h1>
 		</div>
-		<div id="footer">This is the footer.</div>
+		<div id="footer"></div>
 	</div>
 	<script src="http://d3js.org/d3.v3.min.js"></script>
 	<script src="ratios.js"></script>
 	
 	<script>
-	
 	function getStyle(oElm, strCssRule){
 		var strValue = "";
 		if(document.defaultView && document.defaultView.getComputedStyle){
@@ -197,7 +240,8 @@ MEDIA QUERIES
 	}
 	
 	///////////////////////////////////////////////////////////////////////////
-	var selectedArtistName = "NOFX";
+	// start at the top of the list ...
+	var selectedArtistName = "The Velvet Underground";
 	var width = document.getElementById("leftCol").offsetWidth,
 		barHeight = 11,
 		format = d3.format(",d"),
@@ -274,8 +318,6 @@ MEDIA QUERIES
 		.attr("width", diameter2)
 		.attr("height", diameter2)
 		.attr("class", "bubble");
-	
-	//d3.select(self.frameElement).style("height", diameter + "px");
 	
 	function updateTopWordsArtist() {
 		var nWords = parseInt(document.getElementById("nWords").value, 10);
@@ -393,8 +435,10 @@ MEDIA QUERIES
 		.attr("width", width3);
 		//.attr("class", "chart");
 			
-	//var allArtistsTopWords = allTopWordCounts(top100Words, []);
 	updateAllTopWords({children:[]});
+	
+	// Update the bubble chart now that we've got everything else in order
+	updateTopWordsArtist();
 	
 	function updateAllTopWords(selectTopWords) {
 		var x3 = d3.scale.linear()
