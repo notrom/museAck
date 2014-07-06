@@ -174,18 +174,13 @@ MEDIA QUERIES
 			I figure that's probably a pretty good place to start, it's an interesting list with a wide range of artists and some of the entries make for good reading.
 			</p>
 			<p>
-			Using that list as a base I pulled in a list of all the albums and songs in those albums for each of those artists from 
-			<a href="http://lyrics.wikia.com/">LyricWikia</a>, the <a href="http://api.wikia.com/wiki/LyricWiki_API">API</a> 
-			worked like it said on the box, really usable. I wasn't able to collect a discogrpahy for all the artists but I got most of them
-			(I'm pretty sure that was more to do with the way I was using the API data than with the API itself).
+			Using that list as a base I pulled in a discography for each of those artists from 
+			<a href="http://lyrics.wikia.com/">LyricWikia</a>, using their <a href="http://api.wikia.com/wiki/LyricWiki_API">API</a>. I wasn't able to collect a discogrpahy for all the artists but I got most of them.
 			</p>
 			<p>
-			With the complete dicography for most of the artists in Rolling Stone's list, I then went on to collect the lyrics for those songs
-			from <a href="http://www.chartlyrics.com/">Chartlyrics</a> (I would encourage you to consider contributing to their free community).
-			They do have an API which worked OK for individaul queries, but appeared to be rate limited to 1 request every 20 seconds. 
-			I ended up just scraping the lyrics web pages html for the songs I could find. I couldn't get all the songs for all the artist but I 
-			got enough to work from. I exlcuded compilation albums and "featuring" appearances, and only stored one copy of each song regardless
-			of how many times it appears in the discography.
+			I then went on to collect the lyrics for those songs from <a href="http://www.chartlyrics.com/">Chartlyrics</a> (I would encourage you to consider contributing to their free community).
+			Their API appeared to be rate limited to 1 request every 20 seconds so I ended up scraping the lyrics web pages. I couldn't get all the songs for all the artist but I 
+			got enough to work from.
 			</p>
 			<p>
 			Below is a visualisation of the lyrics I collected. I've filtered out the artist where I collected less than 10,000 words. Click an artist lexical density
