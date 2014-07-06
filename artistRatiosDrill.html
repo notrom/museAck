@@ -186,6 +186,9 @@ MEDIA QUERIES
 			<p>
 			Below is a visualisation of the lyrics I collected. I've filtered out the artist where I collected less than 10,000 words. Click an artist lexical density
 			bar on the left and a bubble chart with that artist's top N words is presented, N can be adjusted to show more or less words. 
+			There is also a set of radio buttons allowing you to filter out sets of words. "None" includes all words in the artitst top list.
+			"Common" filters out all words in <a href="http://en.wikipedia.org/wiki/Most_common_words_in_English">Wikipedia's 100 most common words list (just base words, not lexemes)</a>.
+			"Pronouns" filters out pronouns.
 			The right set of bars shows the number of times each word appears when the top 100 words for all artists are combined. The bar colour 
 			changes to match the colour of the word in the bubble chart.
 			</p>
@@ -210,7 +213,12 @@ MEDIA QUERIES
 		</div>
 		<div id="centerCol" class="column">
 			<h1 id="selectArtistTitle">Top N Words For Selected Artist</h1>
-			<p>N = <input id="nWords" type="text" value="10" size="4" onchange="updateTopWordsArtist()"></input>(max 100)</p>
+			<p>
+			N = <input id="nWords" type="text" value="10" size="4" onchange="updateTopWordsArtist()"></input>(max 100)     
+			<br>Exclude: <input type="radio" name="whichWords" value="None" id="whichIncludeAll" checked="true">None</input>
+			<input type="radio" name="whichWords" value="Common Words" id="whichExcludeCommon">Common</input>
+			<input type="radio" name="whichWords" value="Pronouns" id="whichExcludePronouns">Pronouns</input>
+			</p>
 		</div>
 		<div id="rightCol" class="column">
 			<h1>All Artist Combined Top Words</h1>
@@ -244,6 +252,19 @@ MEDIA QUERIES
 			strValue = oElm.currentStyle[strCssRule];
 		}
 		return strValue;
+	}
+	
+	var pronouns = "|all|another|any|anybody|anyone|anything|both|each|each|other|either|everybody|everyone|everything|few|he|her|hers|herself|him|himself|his|i|it|its|itself|many|me|mine|more|most|much|myself|neither|no|one|nobody|none|nothing|one|one|another|other|others|ours|ourselves|several|she|some|somebody|someone|something|that|their|theirs|them|themselves|these|they|this|those|us|we|what|whatever|which|whichever|who|whoever|whom|whomever|whose|you|your|yours|yourself|yourselves|";
+	// from http://en.wikipedia.org/wiki/Most_common_words_in_English
+	var commonWords = "|the|be|to|of|and|a|in|that|have|i|it|for|not|on|with|he|as|you|do|at|this|but|his|by|from|they|we|say|her|she|or|an|will|my|one|all|would|there|their|what|so|up|out|if|about|who|get|which|go|me|when|make|can|like|time|no|just|him|know|take|people|into|year|your|good|some|could|them|see|other|than|then|now|look|only|come|its|over|think|also|back|after|use|two|how|our|work|first|well|way|even|new|want|because|any|these|give|day|most|us|";
+	
+	// click handler for all the radio buttons
+	//var rad = document.myForm.whichWords;
+	var rad = document.getElementsByName("whichWords");
+	for(var i = 0; i < rad.length; i++) {
+		rad[i].onclick = function() {
+			updateTopWordsArtist();
+		};
 	}
 	
 	///////////////////////////////////////////////////////////////////////////
@@ -413,14 +434,26 @@ MEDIA QUERIES
 	// Returns a flattened hierarchy containing all leaf nodes under the root.
 	function artistTopWords(artistName, root, nWords) {
 		var topWords = [];
+		var excludeCommon = document.getElementById("whichExcludeCommon").checked;
+		var excludePronouns = document.getElementById("whichExcludePronouns").checked;
 		
 		for (var i = 0; i < root.length; i++) {
 			if (root[i].artistName === artistName) {
 				var artistTopWords = root[i].topWords;
-				for (var j = 0; j < artistTopWords.length && j < nWords; j++) {
-					topWords.push({ word: artistTopWords[j].word,
-									count: artistTopWords[j].count,
-									value: artistTopWords[j].count });
+				for (var j = 0; j < artistTopWords.length && topWords.length < nWords; j++) {
+					// optionally filter out words
+					var pushWord = true;
+					if (excludeCommon && commonWords.indexOf("|"+artistTopWords[j].word+"|") !== -1) {	
+						pushWord = false;
+					} else if (excludePronouns && pronouns.indexOf("|"+artistTopWords[j].word+"|") !== -1) {
+						pushWord = false;
+					}
+					
+					if (pushWord) {
+						topWords.push({ word: artistTopWords[j].word,
+										count: artistTopWords[j].count,
+										value: artistTopWords[j].count });
+					}
 				}
 			}		
 		}
