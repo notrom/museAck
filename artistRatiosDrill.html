@@ -20,11 +20,21 @@ text {
 }
 
 .chart text {
-  fill: white;
-  font: 10px sans-serif;
-  text-anchor: end;
+  fill: black;
+  font: 12px monospace;
+  text-anchor: left;
 }
 
+.bubble text {
+  fill: black;
+  font: 12px monospace;
+}
+
+.chart3 text {
+  fill: black;
+  font: 12px monospace;
+  text-anchor: right;
+}
 
 /*********************/
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
@@ -216,7 +226,7 @@ MEDIA QUERIES
 		</div>
 		<div id="leftCol" class="column">
 			<h1>Artist Lexical Density</h1>
-			<p>Click an Artist</p>
+			<p>Click an Artist Below</p>
 		</div>
 		<div id="centerCol" class="column">
 			<h1 id="selectArtistTitle">Top N Words For Selected Artist</h1>
@@ -278,7 +288,7 @@ MEDIA QUERIES
 	// start at the top of the list ...
 	var selectedArtistName = "The Velvet Underground";
 	var width = document.getElementById("leftCol").offsetWidth,
-		barHeight = 11,
+		barHeight = 12,
 		format = d3.format(",d"),
 		color = d3.scale.category20c();
 	
@@ -311,7 +321,8 @@ MEDIA QUERIES
 						updateTopWordsArtist();});
 	
 	bar.append("text")
-		.attr("x", function(d) { return x(d.value) - 3; })
+		//.attr("x", function(d) { return x(d.value) - 3; })
+		.attr("x", 3)
 		.attr("y", barHeight / 2)
 		.attr("dy", ".35em")
 		.text(function(d) { return d.artistName + ": " + (d.value*100).toFixed(2) + "%"; })
@@ -472,15 +483,15 @@ MEDIA QUERIES
 	<script src="top100Words.js"></script>
 	<script>
 	
-	var barHeight3 = 11,
+	var barHeight3 = 12,
 		width3 = document.getElementById("rightCol").clientWidth;
 	// remvoe the padding from the width
 	width3 -= parseInt(getStyle(document.getElementById("rightCol"), "padding-right"));
 	width3 -= parseInt(getStyle(document.getElementById("rightCol"), "padding-left"));
 			
 	var chart3 = d3.select("#rightCol").append("svg")
-		.attr("width", width3);
-		//.attr("class", "chart");
+		.attr("width", width3)
+		.attr("class", "chart3");
 			
 	updateAllTopWords({children:[]});
 	
@@ -503,7 +514,7 @@ MEDIA QUERIES
 					if (d.highlight === 1) {
 						return color2(d.word);
 					} else {
-						return "black";
+						return "#E6E6E6";
 					}
 				})
 			.enter().append("g")
@@ -517,10 +528,15 @@ MEDIA QUERIES
 			.text(function(d) { return d.word + ": " + d.count; });
 			
 		bar3.append("text")
-			.attr("x", function(d) { return (3); })
-			.attr("y", barHeight3 / 2)
+			.attr("x", function(d) { 
+							if (x3(d.value) < 40) {
+								return -5 * d.word.length + x3(d.value) - 20; 
+							} else {
+								return 3
+							}
+						})
+			.attr("y", (barHeight3 / 2))
 			.attr("dy", ".35em")
-			.attr("fill", "white")
 			.text(function(d) { return d.word; });
 	}
 	
