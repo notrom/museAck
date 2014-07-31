@@ -211,6 +211,10 @@ MEDIA QUERIES
 			density of (4431/35000)*100 = 12.66%. The lowset entry is DMX at 9.18%, and the highest Aesop Rock at a whopping 21.12%.
 			</p>
 			<p>
+			Note: I've just realised that what I've calculated here is not a true lexical density, it's a very simplified approximation. I'm working towards implementing 
+			a true lexical density but that may take a bit of time. Until then I think the calculation I've got here still provides a good measure to compare these artists.
+			</p>
+			<p>
 			So that's what I've got at the moment, it's a work in progress and I've got a few more ideas about what I can do with this set of data.
 			I'll see where it goes next.
 			</p>
@@ -225,13 +229,13 @@ MEDIA QUERIES
 			<p>Let me know what you think, <span class="codedirection">moc.liamg@timmorton</span></p>
 		</div>
 		<div id="leftCol" class="column">
-			<h1>Artist Lexical Density</h1>
+			<h1>Artist Lexical Density (Simplified calculation)</h1>
 			<p>Click an Artist Below</p>
 		</div>
 		<div id="centerCol" class="column">
-			<h1 id="selectArtistTitle">Top N Words For Selected Artist</h1>
+			<h1 id="selectArtistTitle">Most Common Words For Selected Artist</h1>
 			<p>
-			N = <input id="nWords" type="text" value="10" size="4" onchange="updateTopWordsArtist()"></input>(max 100)     
+			Number of words = <input id="nWords" type="text" value="10" size="4" onchange="updateTopWordsArtist()"></input>(max 100)     
 			<br>Exclude: <input type="radio" name="whichWords" value="None" id="whichIncludeAll" checked="true">None</input>
 			<input type="radio" name="whichWords" value="Common Words" id="whichExcludeCommon">Common</input>
 			<input type="radio" name="whichWords" value="Pronouns" id="whichExcludePronouns">Pronouns</input>
