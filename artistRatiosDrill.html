@@ -376,7 +376,7 @@ MEDIA QUERIES
 			.size([diameter2, diameter2])
 			.padding(1);
 		
-		document.getElementById("selectArtistTitle").innerHTML = "Top N Words For " + selectedArtistName;
+		document.getElementById("selectArtistTitle").innerHTML = "Most Common Words For " + selectedArtistName;
 		var topWords = artistTopWords(selectedArtistName, top100Words, nWords);
 		
 		updateAllTopWords(topWords);
