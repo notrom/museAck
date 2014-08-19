@@ -17456,5 +17456,411 @@ var top100Words = [
 				"count" : 93
 			}
 		]
+	},
+	{
+		"_id" : "Frank Zappa",
+		"artistName" : "Frank Zappa",
+		"topWords" : [
+			{
+				"word" : "the",
+				"count" : 2520
+			},
+			{
+				"word" : "a",
+				"count" : 1715
+			},
+			{
+				"word" : "you",
+				"count" : 1556
+			},
+			{
+				"word" : "",
+				"count" : 1449
+			},
+			{
+				"word" : "i",
+				"count" : 1158
+			},
+			{
+				"word" : "to",
+				"count" : 1154
+			},
+			{
+				"word" : "and",
+				"count" : 1062
+			},
+			{
+				"word" : "of",
+				"count" : 850
+			},
+			{
+				"word" : "it",
+				"count" : 845
+			},
+			{
+				"word" : "vocals",
+				"count" : 823
+			},
+			{
+				"word" : "in",
+				"count" : 805
+			},
+			{
+				"word" : "me",
+				"count" : 561
+			},
+			{
+				"word" : "is",
+				"count" : 539
+			},
+			{
+				"word" : "on",
+				"count" : 532
+			},
+			{
+				"word" : "guitar",
+				"count" : 525
+			},
+			{
+				"word" : "that",
+				"count" : 488
+			},
+			{
+				"word" : "your",
+				"count" : 433
+			},
+			{
+				"word" : "my",
+				"count" : 416
+			},
+			{
+				"word" : "all",
+				"count" : 400
+			},
+			{
+				"word" : "be",
+				"count" : 381
+			},
+			{
+				"word" : "they",
+				"count" : 381
+			},
+			{
+				"word" : "dont",
+				"count" : 364
+			},
+			{
+				"word" : "for",
+				"count" : 355
+			},
+			{
+				"word" : "with",
+				"count" : 355
+			},
+			{
+				"word" : "he",
+				"count" : 353
+			},
+			{
+				"word" : "like",
+				"count" : 348
+			},
+			{
+				"word" : "she",
+				"count" : 336
+			},
+			{
+				"word" : "no",
+				"count" : 308
+			},
+			{
+				"word" : "up",
+				"count" : 303
+			},
+			{
+				"word" : "this",
+				"count" : 301
+			},
+			{
+				"word" : "so",
+				"count" : 289
+			},
+			{
+				"word" : "we",
+				"count" : 287
+			},
+			{
+				"word" : "an",
+				"count" : 287
+			},
+			{
+				"word" : "what",
+				"count" : 285
+			},
+			{
+				"word" : "just",
+				"count" : 285
+			},
+			{
+				"word" : "n",
+				"count" : 283
+			},
+			{
+				"word" : "was",
+				"count" : 277
+			},
+			{
+				"word" : "her",
+				"count" : 274
+			},
+			{
+				"word" : "im",
+				"count" : 274
+			},
+			{
+				"word" : "its",
+				"count" : 262
+			},
+			{
+				"word" : "bass",
+				"count" : 260
+			},
+			{
+				"word" : "get",
+				"count" : 256
+			},
+			{
+				"word" : "go",
+				"count" : 252
+			},
+			{
+				"word" : "keyboards",
+				"count" : 246
+			},
+			{
+				"word" : "de",
+				"count" : 246
+			},
+			{
+				"word" : "little",
+				"count" : 245
+			},
+			{
+				"word" : "do",
+				"count" : 244
+			},
+			{
+				"word" : "out",
+				"count" : 241
+			},
+			{
+				"word" : "are",
+				"count" : 240
+			},
+			{
+				"word" : "got",
+				"count" : 236
+			},
+			{
+				"word" : "know",
+				"count" : 229
+			},
+			{
+				"word" : "from",
+				"count" : 226
+			},
+			{
+				"word" : "but",
+				"count" : 224
+			},
+			{
+				"word" : "now",
+				"count" : 220
+			},
+			{
+				"word" : "his",
+				"count" : 219
+			},
+			{
+				"word" : "some",
+				"count" : 218
+			},
+			{
+				"word" : "oh",
+				"count" : 209
+			},
+			{
+				"word" : "drums",
+				"count" : 209
+			},
+			{
+				"word" : "down",
+				"count" : 205
+			},
+			{
+				"word" : "can",
+				"count" : 204
+			},
+			{
+				"word" : "love",
+				"count" : 200
+			},
+			{
+				"word" : "see",
+				"count" : 194
+			},
+			{
+				"word" : "have",
+				"count" : 193
+			},
+			{
+				"word" : "well",
+				"count" : 187
+			},
+			{
+				"word" : "there",
+				"count" : 183
+			},
+			{
+				"word" : "if",
+				"count" : 181
+			},
+			{
+				"word" : "not",
+				"count" : 171
+			},
+			{
+				"word" : "zappa",
+				"count" : 168
+			},
+			{
+				"word" : "when",
+				"count" : 166
+			},
+			{
+				"word" : "way",
+				"count" : 161
+			},
+			{
+				"word" : "youre",
+				"count" : 160
+			},
+			{
+				"word" : "rhythm",
+				"count" : 155
+			},
+			{
+				"word" : "right",
+				"count" : 150
+			},
+			{
+				"word" : "at",
+				"count" : 147
+			},
+			{
+				"word" : "as",
+				"count" : 147
+			},
+			{
+				"word" : "frank",
+				"count" : 147
+			},
+			{
+				"word" : "or",
+				"count" : 140
+			},
+			{
+				"word" : "white",
+				"count" : 139
+			},
+			{
+				"word" : "here",
+				"count" : 139
+			},
+			{
+				"word" : "really",
+				"count" : 138
+			},
+			{
+				"word" : "over",
+				"count" : 137
+			},
+			{
+				"word" : "girl",
+				"count" : 136
+			},
+			{
+				"word" : "lead",
+				"count" : 136
+			},
+			{
+				"word" : "man",
+				"count" : 131
+			},
+			{
+				"word" : "howard",
+				"count" : 131
+			},
+			{
+				"word" : "percussion",
+				"count" : 130
+			},
+			{
+				"word" : "say",
+				"count" : 129
+			},
+			{
+				"word" : "yeah",
+				"count" : 128
+			},
+			{
+				"word" : "one",
+				"count" : 125
+			},
+			{
+				"word" : "good",
+				"count" : 125
+			},
+			{
+				"word" : "him",
+				"count" : 124
+			},
+			{
+				"word" : "make",
+				"count" : 123
+			},
+			{
+				"word" : "thats",
+				"count" : 122
+			},
+			{
+				"word" : "were",
+				"count" : 122
+			},
+			{
+				"word" : "cant",
+				"count" : 121
+			},
+			{
+				"word" : "saxophone",
+				"count" : 119
+			},
+			{
+				"word" : "take",
+				"count" : 118
+			},
+			{
+				"word" : "let",
+				"count" : 118
+			},
+			{
+				"word" : "time",
+				"count" : 115
+			},
+			{
+				"word" : "by",
+				"count" : 114
+			}
+		]
 	}
 ];
