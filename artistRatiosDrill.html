@@ -178,6 +178,7 @@ MEDIA QUERIES
 	<div id="pagewrap">
 		<div id="header">
 			<p style="font-size: 50px;">Lyric Analysis - Rolling Stone Top 100 Artists</p>
+			<p>Also check out a similar analysis on <a href="/museAck/subredditFirstN.html">Reddit's Default Subreddit comments</a></p>
 			<p>
 			After seeing this <a href="http://rappers.mdaniels.com.s3-website-us-east-1.amazonaws.com/"> analysis of the lyrics used by hip hop artists</a>, 
 			I was curious to see how these numbers stacked up with other artist in other genres. So this is what I've got so far ...
@@ -213,6 +214,7 @@ MEDIA QUERIES
 			<p>
 			Note: I've just realised that what I've calculated here is not a true lexical density, it's a very simplified approximation. I'm working towards implementing 
 			a true lexical density but that may take a bit of time. Until then I think the calculation I've got here still provides a good measure to compare these artists.
+			Here's <a href="/museAck/artistFirstN.html">a similar analysis that only looks at the first 20000 words<a> from each artist and doesn't try and calculate lexical density.
 			</p>
 			<p>
 			So that's what I've got at the moment, it's a work in progress and I've got a few more ideas about what I can do with this set of data.
@@ -484,7 +486,7 @@ MEDIA QUERIES
 	///////////////////////////////////////////////////////////////////////////
 	</script>
 	<!-- get the big data file here -->
-	<script src="top100Words.js"></script>
+	<script src="artistTop100Words.js"></script>
 	<script>
 	
 	var barHeight3 = 12,
