@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+
+<html>	
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<!--[if lt IE 9]>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/aight/1.2.2/aight.min.js"></script>
+	<![endif]-->
+	<title>Lyric Vocabulary - Rolling Stone Top 100 Artists</title>
+	<link rel="stylesheet" type="text/css" href="stylesheets/wordsDisplay.css">
+</head>
+<body>
+	<div id="pagewrap">
+		<div id="header">
+			<p style="font-size: 50px;">Lyric Vocabulary - Rolling Stone Top 100 Artists</p>
+			<p>Also check out a similar analysis on <a href="/museAck/subredditFirstN.html">Reddit's Default Subreddit comments</a></p>
+			<p>
+			After seeing this <a href="http://rappers.mdaniels.com.s3-website-us-east-1.amazonaws.com/"> analysis of the lyrics used by hip hop artists</a>, 
+			I was curious to see how these numbers stacked up with other artist in other genres. So this is what I've got so far ...
+			</p>
+			<p>
+			Rolling Stone Magazine have compiled a list of their <a href="http://www.rollingstone.com/music/lists/100-greatest-artists-of-all-time-19691231">top 100 musical artists of all time</a>.
+			I figure that's probably a pretty good place to start, it's an interesting list with a wide range of artists and some of the entries make for good reading.
+			</p>
+			<p>
+			Using that list as a base I pulled in a discography for each of those artists from 
+			<a href="http://lyrics.wikia.com/">LyricWikia</a>, using their <a href="http://api.wikia.com/wiki/LyricWiki_API">API</a>. I wasn't able to collect a discogrpahy for all the artists but I got most of them.
+			</p>
+			<p>
+			I then went on to collect the lyrics for those songs from <a href="http://www.chartlyrics.com/">Chartlyrics</a> (I would encourage you to consider contributing to their free community).
+			Their API appeared to be rate limited to 1 request every 20 seconds so I ended up scraping the lyrics web pages. I couldn't get all the songs for all the artist but I 
+			got enough to work from.
+			</p>
+			<p>
+			Below is a visualisation of the lyrics I collected. I've filtered out the artist where I collected less than 20,000 words. This left me with only 45 artist
+			which was less than I would have liked, but still enough to make it interesting (the orignal hip hop analysis used 35,000 words).
+			The left set of bars shows the number of different words used in each artist's first 20,000 words. Click an artist name
+			bar on the left and a bubble chart with that artist's top N words is presented, N can be adjusted to show more or less words. 
+			There is also a set of radio buttons allowing you to filter out sets of words. "None" includes all words in the artitst top list.
+			"Common" filters out all words in <a href="http://en.wikipedia.org/wiki/Most_common_words_in_English">Wikipedia's 100 most common words list (just base words, not lexemes)</a>.
+			"Pronouns" filters out pronouns.
+			The right set of bars shows the number of times each word appears when the top 100 words for all artists are combined. The bar colour 
+			changes to match the colour of the word in the bubble chart.
+			</p>
+			<p>
+			So that's what I've got at the moment, it's a work in progress and I've got a few more ideas about what I can do with this set of data.
+			I'll see where it goes next.
+			</p>
+			<p>
+			(Note: NOFX does not appear in Rolling Stone's list, they were used in some early test cases 
+			for the lyric collection process and I've decided to keep them in there)
+			</p>
+			
+			<p>Let me know what you think, notrommit -at- gmail -dot- com</p>
+		</div>
+		<div id="leftCol" class="column">
+			<h1>Number of unique words used in the first 20000 words</h1>
+			<p>Click an Artist Below</p>
+		</div>
+		<div id="centerCol" class="column">
+			<h1 id="selectArtistTitle">Most Common Words For Selected Artist</h1>
+			<p>
+			Number of words = <input id="nWords" type="text" value="10" size="4" onchange="updateTopWordsArtist()"></input>(max 100)     
+			<br>Exclude: <input type="radio" name="whichWords" value="None" id="whichIncludeAll" checked="true">None</input>
+			<input type="radio" name="whichWords" value="Common Words" id="whichExcludeCommon">Common</input>
+			<input type="radio" name="whichWords" value="Pronouns" id="whichExcludePronouns">Pronouns</input>
+			</p>
+		</div>
+		<div id="rightCol" class="column">
+			<h1>All Artist Combined Top Words</h1>
+		</div>
+		<div id="footer"></div>
+	</div>
+	
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-52560191-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+	
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+	<script src="artistFirst20000.js"></script>
+	
+	<script>
+	function getStyle(oElm, strCssRule){
+		var strValue = "";
+		if(document.defaultView && document.defaultView.getComputedStyle){
+			strValue = document.defaultView.getComputedStyle(oElm, "").getPropertyValue(strCssRule);
+		}
+		else if(oElm.currentStyle){
+			strCssRule = strCssRule.replace(/\-(\w)/g, function (strMatch, p1){
+				return p1.toUpperCase();
+			});
+			strValue = oElm.currentStyle[strCssRule];
+		}
+		return strValue;
+	}
+	
+	var pronouns = "|all|another|any|anybody|anyone|anything|both|each|each|other|either|everybody|everyone|everything|few|he|her|hers|herself|him|himself|his|i|it|its|itself|many|me|mine|more|most|much|myself|neither|no|one|nobody|none|nothing|one|one|another|other|others|ours|ourselves|several|she|some|somebody|someone|something|that|their|theirs|them|themselves|these|they|this|those|us|we|what|whatever|which|whichever|who|whoever|whom|whomever|whose|you|your|yours|yourself|yourselves|";
+	// from http://en.wikipedia.org/wiki/Most_common_words_in_English
+	var commonWords = "|the|be|to|of|and|a|in|that|have|i|it|for|not|on|with|he|as|you|do|at|this|but|his|by|from|they|we|say|her|she|or|an|will|my|one|all|would|there|their|what|so|up|out|if|about|who|get|which|go|me|when|make|can|like|time|no|just|him|know|take|people|into|year|your|good|some|could|them|see|other|than|then|now|look|only|come|its|over|think|also|back|after|use|two|how|our|work|first|well|way|even|new|want|because|any|these|give|day|most|us|";
+	
+	// click handler for all the radio buttons
+	//var rad = document.myForm.whichWords;
+	var rad = document.getElementsByName("whichWords");
+	for(var i = 0; i < rad.length; i++) {
+		rad[i].onclick = function() {
+			updateTopWordsArtist();
+		};
+	}
+	
+	///////////////////////////////////////////////////////////////////////////
+	// start at the top of the list ...
+	var selectedArtistName = "Jay-Z";
+	var width = document.getElementById("leftCol").offsetWidth,
+		barHeight = 12,
+		format = d3.format(",d"),
+		color = d3.scale.category20c();
+	
+	width -= parseInt(getStyle(document.getElementById("leftCol"), "padding-right"));
+	width -= parseInt(getStyle(document.getElementById("leftCol"), "padding-right"));
+	
+	var x = d3.scale.linear()
+		.range([0, width]);
+
+	var chart = d3.select("#leftCol").append("svg")
+		.attr("width", width)
+		.attr("class", "chart");;
+	
+	var artistStats = artistStats(artistFirst20000);
+	
+	x.domain([0, d3.max(artistStats, function(d) { return d.value; })]);
+	
+	chart.attr("height", barHeight * artistStats.length);
+	
+	var bar = chart.selectAll("g")
+		.data(artistStats)
+		.enter().append("g")
+		.attr("transform", function(d, i) { return "translate(0," + i * barHeight + ")"; });
+	
+	bar.append("rect")
+		.attr("width", function(d) { return x(d.value); })
+		.attr("height", barHeight - 1)
+		.on("click", function(d) {
+						selectedArtistName = d.artistName;
+						updateTopWordsArtist();});
+	
+	bar.append("text")
+		//.attr("x", function(d) { return x(d.value) - 3; })
+		.attr("x", 3)
+		.attr("y", barHeight / 2)
+		.attr("dy", ".35em")
+		.text(function(d) { return d.artistName + ": " + d.value; })
+		.on("click", function(d) {
+						selectedArtistName = d.artistName;
+						updateTopWordsArtist();});
+	
+	// Returns a flattened hierarchy containing all leaf nodes under the root.
+	function artistStats(root) {
+		var classes = [];
+		
+		for (var i = 0; i < root.length; i++) {
+			if (root[i].smryWordCount >= 20000) {
+				classes.push({	artistName:root[i].artistName, 
+								uniqueWordCount: root[i].uniqueWordCount,
+								smryWordCount: root[i].smryWordCount,
+								totalWordCount: root[i].totalWordCount,
+								value: root[i].uniqueWordCount});
+								//value: 50});
+			}
+		}
+		classes.sort(function(a, b) { return b["uniqueWordCount"] - a["uniqueWordCount"]; });
+		return classes;
+	}
+	
+	//d3.select(self.frameElement).style("height", diameter + "px");
+	///////////////////////////////////////////////////////////////////////////
+	</script>
+	
+	<script>
+	///////////////////////////////////////////////////////////////////////////
+	var diameter2 = document.getElementById("centerCol").offsetWidth,
+		format2 = d3.format(",d"),
+		color2 = d3.scale.category20c();
+		
+	diameter2 -= parseInt(getStyle(document.getElementById("centerCol"), "padding-right"));
+	diameter2 -= parseInt(getStyle(document.getElementById("centerCol"), "padding-left"));
+	
+	var svg2 = d3.select("#centerCol").append("svg")
+		.attr("width", diameter2)
+		.attr("height", diameter2)
+		.attr("class", "bubble");
+	
+	function updateTopWordsArtist() {
+		var nWords = parseInt(document.getElementById("nWords").value, 10);
+		var bubble2 = d3.layout.pack()
+			.sort(function(a, b) { return a.count > b.count; } )
+			.size([diameter2, diameter2])
+			.padding(1);
+		
+		document.getElementById("selectArtistTitle").innerHTML = "Most Common Words For " + selectedArtistName;
+		var topWords = artistTopWords(selectedArtistName, top100Words, nWords);
+		
+		updateAllTopWords(topWords);
+		
+		var node2 = svg2.selectAll(".node")
+			.data(bubble2.nodes(topWords)
+					.filter(function(d, i) { return !d.children; }),
+				function(d) {return d.word} // key data based on className to keep object constancy
+			);
+		
+		// capture the enter selection
+		var nodeEnter = node2.enter()
+			.append("g")
+			.attr("class", "node")
+			.attr("transform", function (d) {
+				return "translate(" + 10 + "," + d.y + ")";
+			});
+		
+		// re-use enter selection for circles
+		nodeEnter
+			.append("circle")
+			.attr("r", function (d) {return 0;})
+			.style("fill", function (d) {return color2(d.word);});
+		
+		// re-use enter selection for titles
+		nodeEnter
+			.append("title")
+			.text(function (d) {
+				return d.word + ": " + format(d.count);
+			});
+		
+		nodeEnter
+			.append("text")
+			.attr("dy", ".3em")
+			.style("text-anchor", "middle")
+			.text(function(d) { return d.word + ": " + d.count; });
+		
+		node2
+			.append("title")
+			.text(function (d) {
+				return d.word + ": " + format(d.count);
+			});
+		
+		node2.select("text")
+			.text(function(d) { return d.word + ": " + d.count; });
+			
+		node2.select("title")
+			.text(function (d) {
+				return d.word + ": " + format(d.count);
+			});
+		
+		node2.select("circle")
+			.style("fill", function (d) {
+				return color2(d.word);
+			})
+			.transition().duration(3000)
+			.attr("r", function (d) {
+				return d.r;
+			});
+	
+		node2.transition().duration(3000).attr("class", "node")
+			.attr("transform", function (d) {
+				return "translate(" + d.x + "," + d.y + ")";
+			});
+		
+		var nodeExit = node2.exit().transition().duration(2000)
+			.attr("class", "node")
+			.attr("transform", function (d) {
+				return "translate(" + (diameter2 - 20) + "," + d.y + ")";
+			});;
+		nodeExit.transition().duration(2000)
+			.select("circle")
+			.attr("r", 0);
+		nodeExit.transition().duration(5000).remove();
+	}
+	
+	// Returns a flattened hierarchy containing all leaf nodes under the root.
+	function artistTopWords(artistName, root, nWords) {
+		var topWords = [];
+		var excludeCommon = document.getElementById("whichExcludeCommon").checked;
+		var excludePronouns = document.getElementById("whichExcludePronouns").checked;
+		
+		for (var i = 0; i < root.length; i++) {
+			if (root[i].artistName === artistName) {
+				var artistTopWords = root[i].topWords;
+				for (var j = 0; j < artistTopWords.length && topWords.length < nWords; j++) {
+					// optionally filter out words
+					var pushWord = true;
+					if (excludeCommon && commonWords.indexOf("|"+artistTopWords[j].word+"|") !== -1) {	
+						pushWord = false;
+					} else if (excludePronouns && pronouns.indexOf("|"+artistTopWords[j].word+"|") !== -1) {
+						pushWord = false;
+					}
+					
+					if (pushWord) {
+						topWords.push({ word: artistTopWords[j].word,
+										count: artistTopWords[j].count,
+										value: artistTopWords[j].count });
+					}
+				}
+			}		
+		}
+		return {children: topWords};
+	}
+	///////////////////////////////////////////////////////////////////////////
+	</script>
+	<!-- get the big data file here -->
+	<script src="filteredArtistTop100Words.js"></script>
+	<script>
+	
+	var barHeight3 = 12,
+		width3 = document.getElementById("rightCol").clientWidth;
+	// remvoe the padding from the width
+	width3 -= parseInt(getStyle(document.getElementById("rightCol"), "padding-right"));
+	width3 -= parseInt(getStyle(document.getElementById("rightCol"), "padding-left"));
+			
+	var chart3 = d3.select("#rightCol").append("svg")
+		.attr("width", width3)
+		.attr("class", "chart3");
+			
+	updateAllTopWords({children:[]});
+	
+	// Update the bubble chart now that we've got everything else in order
+	updateTopWordsArtist();
+	
+	function updateAllTopWords(selectTopWords) {
+		var x3 = d3.scale.linear()
+			.range([0, width3]);
+	
+		var allArtistsTopWords = allTopWordCounts(top100Words, selectTopWords);
+		
+		x3.domain([0, d3.max(allArtistsTopWords, function(d) { return d.value; })]);
+		
+		chart3.attr("height", barHeight3 * allArtistsTopWords.length);
+		
+		var bar3 = chart3.selectAll("g")
+			.data(allArtistsTopWords)
+			.style("fill", function (d) {
+					if (d.highlight === 1) {
+						return color2(d.word);
+					} else {
+						return "#E6E6E6";
+					}
+				})
+			.enter().append("g")
+			.attr("transform", function(d, i) { return "translate(" + (width3 - x3(d.value)) + ", " + i * barHeight3 + ")"; });
+		
+		bar3.append("rect")
+			.attr("width", function(d) { return x3(d.value);})
+			.attr("height", barHeight3 - 1);
+		
+		bar3.append("title")
+			.text(function(d) { return d.word + ": " + d.count; });
+			
+		bar3.append("text")
+			.attr("x", function(d) { 
+							if (x3(d.value) < 40) {
+								return -5 * d.word.length + x3(d.value) - 20; 
+							} else {
+								return 3
+							}
+						})
+			.attr("y", (barHeight3 / 2))
+			.attr("dy", ".35em")
+			.text(function(d) { return d.word; });
+	}
+	
+	function allTopWordCounts(allArtistsWords, selectTopWords) {
+		var allWords = [];
+		var idx = {};
+		
+		var selectWordsString = "|";
+		
+		selectTopWords.children.forEach(function (d) { selectWordsString += d.word + "|"; });
+		
+		// for each artist
+		for (var i = 0; i < allArtistsWords.length; i++) {
+			var artistTopWords = allArtistsWords[i].topWords;
+			// for each word for that artist
+			for (var j = 0; j < artistTopWords.length; j++) {
+				if (idx.hasOwnProperty(artistTopWords[j].word)) {
+					allWords[idx[artistTopWords[j].word]].count += artistTopWords[j].count;
+					allWords[idx[artistTopWords[j].word]].value += artistTopWords[j].count;
+				} else {
+					var highlight = 0;
+					if (selectWordsString.indexOf("|"+artistTopWords[j].word+"|") != -1) {	
+						highlight = 1;
+					}
+					idx[artistTopWords[j].word] = allWords.length;
+					allWords.push({ word: artistTopWords[j].word,
+									highlight: highlight,
+									count: artistTopWords[j].count,
+									value: artistTopWords[j].count + 5000});
+				}
+			}
+		}
+		return allWords.sort(function (a, b) {return b.count - a.count;});
+	}
+	</script>
+	
+</body>
+</html>
