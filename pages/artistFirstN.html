@@ -7,177 +7,13 @@
 	<!--[if lt IE 9]>
 	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/aight/1.2.2/aight.min.js"></script>
 	<![endif]-->
-	<title>Lyric Analysis - Rolling Stone Top 100 Artists</title>
+	<title>Lyric Vocabulary - Rolling Stone Top 100 Artists</title>
+	<link rel="stylesheet" type="text/css" href="stylesheets/wordsDisplay.css">
 </head>
-<style>
-
-text {
-  font: 10px sans-serif;
-}
-
-.chart rect {
-  fill: steelblue;
-}
-
-.chart text {
-  fill: black;
-  font: 12px monospace;
-  text-anchor: left;
-}
-
-.bubble text {
-  fill: black;
-  font: 12px monospace;
-}
-
-.chart3 text {
-  fill: black;
-  font: 12px monospace;
-  text-anchor: right;
-}
-
-/*********************/
-@import url(http://fonts.googleapis.com/css?family=Open+Sans);
-
-body { 
-  font-family: 'Open Sans', sans-serif;
-  color: #666;
-}
-
-body h1 {
-	font-size: 1em;
-}
-
-body p {
-	font-size: 0.75em;
-}
-
-/* STRUCTURE */
-
-#pagewrap {
-	padding: 5px;
-	width: 1100px;
-	margin: 20px auto;
-}
-#header {
-	/*height: 100px;*/
-	padding: 0 15px;
-}
-#leftCol {
-	width: 290px;
-	float: left;
-	padding: 5px 15px;
-}
-
-#centerCol {
-	width: 484px; /* Account for margins + border values */
-	float: left;
-	padding: 5px 15px;
-	margin: 0px 5px 5px 5px;
-}
-
-#rightCol {
-	width: 220px;
-	padding: 5px 15px;
-	float: left;
-}
-#footer {
-	clear: both;
-	padding: 0 15px;
-}
-
-/************************************************************************************
-MEDIA QUERIES
-*************************************************************************************/
-/* for 980px or less */
-@media screen and (max-width: 980px) {
-	
-	#pagewrap {
-		width: 94%;
-	}
-	#content {
-		width: 41%;
-		padding: 1% 4%;
-	}
-	#middle {
-		width: 41%;
-		padding: 1% 4%;
-		margin: 0px 0px 5px 5px;
-		float: right;
-	}
-	
-	#sidebar {
-		clear: both;
-		padding: 1% 4%;
-		width: auto;
-		float: none;
-	}
-
-	#header, #footer {
-		padding: 1% 4%;
-	}
-}
-
-/* for 700px or less */
-@media screen and (max-width: 600px) {
-
-	#content {
-		width: auto;
-		float: none;
-	}
-	
-	#middle {
-		width: auto;
-		float: none;
-		margin-left: 0px;
-	}
-	
-	#sidebar {
-		width: auto;
-		float: none;
-	}
-
-}
-
-/* for 480px or less */
-@media screen and (max-width: 480px) {
-
-	#header {
-		height: auto;
-	}
-	h1 {
-		font-size: 2em;
-	}
-	#sidebar {
-		display: none;
-	}
-
-}
-
-
-#content {
-	background: #f8f8f8;
-}
-#sidebar {
-	background: #f0efef;
-}
-#header, #content, #middle, #sidebar {
-	margin-bottom: 5px;
-}
-
-#pagewrap, #header, #content, #middle, #sidebar, #footer {
-	border: solid 1px #ccc;
-}
-
-
-/*********************/
-	
-
-</style>
 <body>
 	<div id="pagewrap">
 		<div id="header">
-			<p style="font-size: 50px;">Lyric Analysis - Rolling Stone Top 100 Artists</p>
+			<p style="font-size: 50px;">Lyric Vocabulary - Rolling Stone Top 100 Artists</p>
 			<p>Also check out a similar analysis on <a href="/museAck/subredditFirstN.html">Reddit's Default Subreddit comments</a></p>
 			<p>
 			After seeing this <a href="http://rappers.mdaniels.com.s3-website-us-east-1.amazonaws.com/"> analysis of the lyrics used by hip hop artists</a>, 
@@ -197,7 +33,9 @@ MEDIA QUERIES
 			got enough to work from.
 			</p>
 			<p>
-			Below is a visualisation of the lyrics I collected. I've filtered out the artist where I collected less than 10,000 words. Click an artist lexical density
+			Below is a visualisation of the lyrics I collected. I've filtered out the artist where I collected less than 20,000 words. This left me with only 45 artist
+			which was less than I would have liked, but still enough to make it interesting (the orignal hip hop analysis used 35,000 words).
+			The left set of bars shows the number of different words used in each artist's first 20,000 words. Click an artist name
 			bar on the left and a bubble chart with that artist's top N words is presented, N can be adjusted to show more or less words. 
 			There is also a set of radio buttons allowing you to filter out sets of words. "None" includes all words in the artitst top list.
 			"Common" filters out all words in <a href="http://en.wikipedia.org/wiki/Most_common_words_in_English">Wikipedia's 100 most common words list (just base words, not lexemes)</a>.
@@ -206,32 +44,18 @@ MEDIA QUERIES
 			changes to match the colour of the word in the bubble chart.
 			</p>
 			<p>
-			<a href="http://en.wikipedia.org/wiki/Lexical_density">Lexical Density</a> seems like a reasonably good indicator of the vocabulary
-			used by each artist, it differs from the measure use in the orignal hip hop analysis but I think it allows for a good comparison between 
-			these various artists. As a point of reference with the hip hop data, Ice T, pretty much in the middle of the pack, has a lexical 
-			density of (4431/35000)*100 = 12.66%. The lowset entry is DMX at 9.18%, and the highest Aesop Rock at a whopping 21.12%.
-			</p>
-			<p>
-			Note: I've just realised that what I've calculated here is not a true lexical density, it's a very simplified approximation. I'm working towards implementing 
-			a true lexical density but that may take a bit of time. Until then I think the calculation I've got here still provides a good measure to compare these artists.
-			Here's <a href="/museAck/artistFirstN.html">a similar analysis that only looks at the first 20000 words<a> from each artist and doesn't try and calculate lexical density.
-			</p>
-			<p>
 			So that's what I've got at the moment, it's a work in progress and I've got a few more ideas about what I can do with this set of data.
 			I'll see where it goes next.
 			</p>
 			<p>
-			(Note: Tool and NOFX do not appear in Rolling Stone's list, they were used in some early test cases 
+			(Note: NOFX does not appear in Rolling Stone's list, they were used in some early test cases 
 			for the lyric collection process and I've decided to keep them in there)
 			</p>
 			
-			<style type="text/css">
-				span.codedirection { unicode-bidi:bidi-override; direction: rtl; }
-			</style>
-			<p>Let me know what you think, <span class="codedirection">moc.liamg@timmorton</span></p>
+			<p>Let me know what you think, notrommit -at- gmail -dot- com</p>
 		</div>
 		<div id="leftCol" class="column">
-			<h1>Artist Lexical Density (Simplified calculation)</h1>
+			<h1>Number of unique words used in the first 20000 words</h1>
 			<p>Click an Artist Below</p>
 		</div>
 		<div id="centerCol" class="column">
@@ -256,11 +80,10 @@ MEDIA QUERIES
 		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 		ga('create', 'UA-52560191-1', 'auto');
 		ga('send', 'pageview');
-
 	</script>
 	
 	<script src="http://d3js.org/d3.v3.min.js"></script>
-	<script src="ratios.js"></script>
+	<script src="artistFirst20000.js"></script>
 	
 	<script>
 	function getStyle(oElm, strCssRule){
@@ -292,7 +115,7 @@ MEDIA QUERIES
 	
 	///////////////////////////////////////////////////////////////////////////
 	// start at the top of the list ...
-	var selectedArtistName = "The Velvet Underground";
+	var selectedArtistName = "Jay-Z";
 	var width = document.getElementById("leftCol").offsetWidth,
 		barHeight = 12,
 		format = d3.format(",d"),
@@ -308,7 +131,7 @@ MEDIA QUERIES
 		.attr("width", width)
 		.attr("class", "chart");;
 	
-	var artistStats = artistStats(ratios);
+	var artistStats = artistStats(artistFirst20000);
 	
 	x.domain([0, d3.max(artistStats, function(d) { return d.value; })]);
 	
@@ -331,7 +154,7 @@ MEDIA QUERIES
 		.attr("x", 3)
 		.attr("y", barHeight / 2)
 		.attr("dy", ".35em")
-		.text(function(d) { return d.artistName + ": " + (d.value*100).toFixed(2) + "%"; })
+		.text(function(d) { return d.artistName + ": " + d.value; })
 		.on("click", function(d) {
 						selectedArtistName = d.artistName;
 						updateTopWordsArtist();});
@@ -341,15 +164,16 @@ MEDIA QUERIES
 		var classes = [];
 		
 		for (var i = 0; i < root.length; i++) {
-			classes.push({_id: root[i]._id,
-							artistName:root[i].value.artistName, 
-							ratio: root[i].value.ratio,
-							uniqueWordCount: root[i].value.uniqueWordCount,
-							totalWordCount: root[i].value.totalWordCount,
-							value: root[i].value.ratio});
-							//value: 50});
+			if (root[i].smryWordCount >= 20000) {
+				classes.push({	artistName:root[i].artistName, 
+								uniqueWordCount: root[i].uniqueWordCount,
+								smryWordCount: root[i].smryWordCount,
+								totalWordCount: root[i].totalWordCount,
+								value: root[i].uniqueWordCount});
+								//value: 50});
+			}
 		}
-		classes.sort(function(a, b) { return b["ratio"] - a["ratio"]; });
+		classes.sort(function(a, b) { return b["uniqueWordCount"] - a["uniqueWordCount"]; });
 		return classes;
 	}
 	
@@ -486,7 +310,7 @@ MEDIA QUERIES
 	///////////////////////////////////////////////////////////////////////////
 	</script>
 	<!-- get the big data file here -->
-	<script src="artistTop100Words.js"></script>
+	<script src="filteredArtistTop100Words.js"></script>
 	<script>
 	
 	var barHeight3 = 12,

@@ -7,235 +7,44 @@
 	<!--[if lt IE 9]>
 	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/aight/1.2.2/aight.min.js"></script>
 	<![endif]-->
-	<title>Lyric Analysis - Rolling Stone Top 100 Artists</title>
+	<title>Reddit's Vocabulary - Default Subreddits</title>
+	<link rel="stylesheet" type="text/css" href="stylesheets/wordsDisplay.css">
 </head>
-<style>
-
-text {
-  font: 10px sans-serif;
-}
-
-.chart rect {
-  fill: steelblue;
-}
-
-.chart text {
-  fill: black;
-  font: 12px monospace;
-  text-anchor: left;
-}
-
-.bubble text {
-  fill: black;
-  font: 12px monospace;
-}
-
-.chart3 text {
-  fill: black;
-  font: 12px monospace;
-  text-anchor: right;
-}
-
-/*********************/
-@import url(http://fonts.googleapis.com/css?family=Open+Sans);
-
-body { 
-  font-family: 'Open Sans', sans-serif;
-  color: #666;
-}
-
-body h1 {
-	font-size: 1em;
-}
-
-body p {
-	font-size: 0.75em;
-}
-
-/* STRUCTURE */
-
-#pagewrap {
-	padding: 5px;
-	width: 1100px;
-	margin: 20px auto;
-}
-#header {
-	/*height: 100px;*/
-	padding: 0 15px;
-}
-#leftCol {
-	width: 290px;
-	float: left;
-	padding: 5px 15px;
-}
-
-#centerCol {
-	width: 484px; /* Account for margins + border values */
-	float: left;
-	padding: 5px 15px;
-	margin: 0px 5px 5px 5px;
-}
-
-#rightCol {
-	width: 220px;
-	padding: 5px 15px;
-	float: left;
-}
-#footer {
-	clear: both;
-	padding: 0 15px;
-}
-
-/************************************************************************************
-MEDIA QUERIES
-*************************************************************************************/
-/* for 980px or less */
-@media screen and (max-width: 980px) {
-	
-	#pagewrap {
-		width: 94%;
-	}
-	#content {
-		width: 41%;
-		padding: 1% 4%;
-	}
-	#middle {
-		width: 41%;
-		padding: 1% 4%;
-		margin: 0px 0px 5px 5px;
-		float: right;
-	}
-	
-	#sidebar {
-		clear: both;
-		padding: 1% 4%;
-		width: auto;
-		float: none;
-	}
-
-	#header, #footer {
-		padding: 1% 4%;
-	}
-}
-
-/* for 700px or less */
-@media screen and (max-width: 600px) {
-
-	#content {
-		width: auto;
-		float: none;
-	}
-	
-	#middle {
-		width: auto;
-		float: none;
-		margin-left: 0px;
-	}
-	
-	#sidebar {
-		width: auto;
-		float: none;
-	}
-
-}
-
-/* for 480px or less */
-@media screen and (max-width: 480px) {
-
-	#header {
-		height: auto;
-	}
-	h1 {
-		font-size: 2em;
-	}
-	#sidebar {
-		display: none;
-	}
-
-}
-
-
-#content {
-	background: #f8f8f8;
-}
-#sidebar {
-	background: #f0efef;
-}
-#header, #content, #middle, #sidebar {
-	margin-bottom: 5px;
-}
-
-#pagewrap, #header, #content, #middle, #sidebar, #footer {
-	border: solid 1px #ccc;
-}
-
-
-/*********************/
-	
-
-</style>
 <body>
 	<div id="pagewrap">
 		<div id="header">
-			<p style="font-size: 50px;">Lyric Analysis - Rolling Stone Top 100 Artists</p>
-			<p>Also check out a similar analysis on <a href="/museAck/subredditFirstN.html">Reddit's Default Subreddit comments</a></p>
+			<p style="font-size: 50px;">Reddit's Vocabulary - Default Subreddits</p>
 			<p>
-			After seeing this <a href="http://rappers.mdaniels.com.s3-website-us-east-1.amazonaws.com/"> analysis of the lyrics used by hip hop artists</a>, 
-			I was curious to see how these numbers stacked up with other artist in other genres. So this is what I've got so far ...
+			Based on some work I did on <a href="/museAck/artistFirstN.html">the Vocabulary of Rolling Stone's Top 100 Artists<a>, I thought it might be interesting to do a similar analysis
+			of the comments in <a href="http://www.reddit.com/r/defaults/comments/24zz8z/list_of_default_subreddits_may_07_2014/">the 50 default subreddits<a>. 
+			This is what I ended up with.
 			</p>
 			<p>
-			Rolling Stone Magazine have compiled a list of their <a href="http://www.rollingstone.com/music/lists/100-greatest-artists-of-all-time-19691231">top 100 musical artists of all time</a>.
-			I figure that's probably a pretty good place to start, it's an interesting list with a wide range of artists and some of the entries make for good reading.
+			I used the <a href="http://www.reddit.com/dev/api">Reddit JSON API<a> to collect the comments from the top 100 hot threads on each default sub. This collection was done around the 30 July 2014.
 			</p>
 			<p>
-			Using that list as a base I pulled in a discography for each of those artists from 
-			<a href="http://lyrics.wikia.com/">LyricWikia</a>, using their <a href="http://api.wikia.com/wiki/LyricWiki_API">API</a>. I wasn't able to collect a discogrpahy for all the artists but I got most of them.
-			</p>
-			<p>
-			I then went on to collect the lyrics for those songs from <a href="http://www.chartlyrics.com/">Chartlyrics</a> (I would encourage you to consider contributing to their free community).
-			Their API appeared to be rate limited to 1 request every 20 seconds so I ended up scraping the lyrics web pages. I couldn't get all the songs for all the artist but I 
-			got enough to work from.
-			</p>
-			<p>
-			Below is a visualisation of the lyrics I collected. I've filtered out the artist where I collected less than 10,000 words. Click an artist lexical density
-			bar on the left and a bubble chart with that artist's top N words is presented, N can be adjusted to show more or less words. 
+			Below is a visualisation of the comments I collected. I've filtered out the subreddits where I collected less than 50,000 words. This left me with words for 35 subs.
+			The left set of bars shows the number of different words used in each subreddits's first 50,000 words. Click an sureddit name
+			bar on the left and a bubble chart with that sureddit's top N words is presented, N can be adjusted to show more or less words. 
 			There is also a set of radio buttons allowing you to filter out sets of words. "None" includes all words in the artitst top list.
 			"Common" filters out all words in <a href="http://en.wikipedia.org/wiki/Most_common_words_in_English">Wikipedia's 100 most common words list (just base words, not lexemes)</a>.
 			"Pronouns" filters out pronouns.
-			The right set of bars shows the number of times each word appears when the top 100 words for all artists are combined. The bar colour 
+			The right set of bars shows the number of times each word appears when the top 100 words for all sureddits are combined. The bar colour 
 			changes to match the colour of the word in the bubble chart.
-			</p>
-			<p>
-			<a href="http://en.wikipedia.org/wiki/Lexical_density">Lexical Density</a> seems like a reasonably good indicator of the vocabulary
-			used by each artist, it differs from the measure use in the orignal hip hop analysis but I think it allows for a good comparison between 
-			these various artists. As a point of reference with the hip hop data, Ice T, pretty much in the middle of the pack, has a lexical 
-			density of (4431/35000)*100 = 12.66%. The lowset entry is DMX at 9.18%, and the highest Aesop Rock at a whopping 21.12%.
-			</p>
-			<p>
-			Note: I've just realised that what I've calculated here is not a true lexical density, it's a very simplified approximation. I'm working towards implementing 
-			a true lexical density but that may take a bit of time. Until then I think the calculation I've got here still provides a good measure to compare these artists.
-			Here's <a href="/museAck/artistFirstN.html">a similar analysis that only looks at the first 20000 words<a> from each artist and doesn't try and calculate lexical density.
 			</p>
 			<p>
 			So that's what I've got at the moment, it's a work in progress and I've got a few more ideas about what I can do with this set of data.
 			I'll see where it goes next.
 			</p>
-			<p>
-			(Note: Tool and NOFX do not appear in Rolling Stone's list, they were used in some early test cases 
-			for the lyric collection process and I've decided to keep them in there)
-			</p>
 			
-			<style type="text/css">
-				span.codedirection { unicode-bidi:bidi-override; direction: rtl; }
-			</style>
-			<p>Let me know what you think, <span class="codedirection">moc.liamg@timmorton</span></p>
+			<p>Let me know what you think, notrommit -at- gmail -dot- com</p>
 		</div>
 		<div id="leftCol" class="column">
-			<h1>Artist Lexical Density (Simplified calculation)</h1>
-			<p>Click an Artist Below</p>
+			<h1>Number of unique words used in the first 50000 words</h1>
+			<p>Click an Subreddit Below</p>
 		</div>
 		<div id="centerCol" class="column">
-			<h1 id="selectArtistTitle">Most Common Words For Selected Artist</h1>
+			<h1 id="selectArtistTitle">Most Common Words For Selected Subreddit</h1>
 			<p>
 			Number of words = <input id="nWords" type="text" value="10" size="4" onchange="updateTopWordsArtist()"></input>(max 100)     
 			<br>Exclude: <input type="radio" name="whichWords" value="None" id="whichIncludeAll" checked="true">None</input>
@@ -244,7 +53,7 @@ MEDIA QUERIES
 			</p>
 		</div>
 		<div id="rightCol" class="column">
-			<h1>All Artist Combined Top Words</h1>
+			<h1>All Default Subreddits Combined Top Words</h1>
 		</div>
 		<div id="footer"></div>
 	</div>
@@ -256,11 +65,10 @@ MEDIA QUERIES
 		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 		ga('create', 'UA-52560191-1', 'auto');
 		ga('send', 'pageview');
-
 	</script>
 	
 	<script src="http://d3js.org/d3.v3.min.js"></script>
-	<script src="ratios.js"></script>
+	<script src="subredditFirst50000.js"></script>
 	
 	<script>
 	function getStyle(oElm, strCssRule){
@@ -292,7 +100,7 @@ MEDIA QUERIES
 	
 	///////////////////////////////////////////////////////////////////////////
 	// start at the top of the list ...
-	var selectedArtistName = "The Velvet Underground";
+	var selectedArtistName = "funny";
 	var width = document.getElementById("leftCol").offsetWidth,
 		barHeight = 12,
 		format = d3.format(",d"),
@@ -308,9 +116,10 @@ MEDIA QUERIES
 		.attr("width", width)
 		.attr("class", "chart");;
 	
-	var artistStats = artistStats(ratios);
+	var artistStats = artistStats(subredditFirst50000);
 	
-	x.domain([0, d3.max(artistStats, function(d) { return d.value; })]);
+	x.domain([d3.min(artistStats, function(d) { return d.value; }) - 1000, 
+			  d3.max(artistStats, function(d) { return d.value; })]);
 	
 	chart.attr("height", barHeight * artistStats.length);
 	
@@ -323,7 +132,7 @@ MEDIA QUERIES
 		.attr("width", function(d) { return x(d.value); })
 		.attr("height", barHeight - 1)
 		.on("click", function(d) {
-						selectedArtistName = d.artistName;
+						selectedArtistName = d.submissionSub;
 						updateTopWordsArtist();});
 	
 	bar.append("text")
@@ -331,9 +140,9 @@ MEDIA QUERIES
 		.attr("x", 3)
 		.attr("y", barHeight / 2)
 		.attr("dy", ".35em")
-		.text(function(d) { return d.artistName + ": " + (d.value*100).toFixed(2) + "%"; })
+		.text(function(d) { return d.submissionSub + ": " + d.value; })
 		.on("click", function(d) {
-						selectedArtistName = d.artistName;
+						selectedArtistName = d.submissionSub;
 						updateTopWordsArtist();});
 	
 	// Returns a flattened hierarchy containing all leaf nodes under the root.
@@ -341,15 +150,16 @@ MEDIA QUERIES
 		var classes = [];
 		
 		for (var i = 0; i < root.length; i++) {
-			classes.push({_id: root[i]._id,
-							artistName:root[i].value.artistName, 
-							ratio: root[i].value.ratio,
-							uniqueWordCount: root[i].value.uniqueWordCount,
-							totalWordCount: root[i].value.totalWordCount,
-							value: root[i].value.ratio});
-							//value: 50});
+			if (root[i].smryWordCount >= 50000) {
+				classes.push({	submissionSub:root[i].submissionSub, 
+								uniqueWordCount: root[i].uniqueWordCount,
+								smryWordCount: root[i].smryWordCount,
+								totalWordCount: root[i].totalWordCount,
+								value: root[i].uniqueWordCount});
+								//value: 50});
+			}
 		}
-		classes.sort(function(a, b) { return b["ratio"] - a["ratio"]; });
+		classes.sort(function(a, b) { return b["uniqueWordCount"] - a["uniqueWordCount"]; });
 		return classes;
 	}
 	
@@ -462,7 +272,7 @@ MEDIA QUERIES
 		var excludePronouns = document.getElementById("whichExcludePronouns").checked;
 		
 		for (var i = 0; i < root.length; i++) {
-			if (root[i].artistName === artistName) {
+			if (root[i].submissionSub === artistName) {
 				var artistTopWords = root[i].topWords;
 				for (var j = 0; j < artistTopWords.length && topWords.length < nWords; j++) {
 					// optionally filter out words
@@ -486,7 +296,7 @@ MEDIA QUERIES
 	///////////////////////////////////////////////////////////////////////////
 	</script>
 	<!-- get the big data file here -->
-	<script src="artistTop100Words.js"></script>
+	<script src="filteredSubTop100Words.js"></script>
 	<script>
 	
 	var barHeight3 = 12,
